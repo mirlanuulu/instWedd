@@ -53,6 +53,52 @@
     text-wrap: pretty;
   }
 
+  /*
+   * Полоса прокрутки: тонкая золотая пилюля на бумаге, как тиснение на открытке.
+   * Прозрачная рамка с background-clip отодвигает ползунок от краёв дорожки.
+   * На телефоне полоса накладная, и эти стили её не трогают.
+   */
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: var(--color-paper-2);
+    box-shadow: inset 1px 0 0 var(--color-rule);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border: 3px solid transparent;
+    border-radius: var(--radius-pill);
+    background: linear-gradient(
+        to bottom,
+        var(--color-gold-2),
+        var(--color-gold) 45%,
+        var(--color-gold-deep)
+      )
+      padding-box;
+    min-height: 48px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover,
+  ::-webkit-scrollbar-thumb:active {
+    border-width: 2px;
+    background: linear-gradient(to bottom, var(--color-gold), var(--color-gold-deep)) padding-box;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background-color: var(--color-paper-2);
+  }
+
+  /* Firefox не знает ::-webkit-scrollbar: ему хватает цветов и тонкой ширины. */
+  @supports not selector(::-webkit-scrollbar) {
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-gold) var(--color-paper-2);
+    }
+  }
+
   /* Кольцо фокуса появляется сразу, без перехода. */
   :focus-visible {
     outline: 2px solid var(--color-focus);
