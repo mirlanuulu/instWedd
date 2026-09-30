@@ -1,0 +1,100 @@
+/* Hallmark · route: custom (bespoke) · structure: envelope intro that unfolds into a single-column invitation
+ * idea: "the page is the letter that was inside the envelope"
+ * themes: romantic (ivory paper, rose accent, script + Cormorant) · national (cream paper, burgundy + gold, Forum + Cormorant)
+ * axes: light / handwritten · roman-serif / chromatic-dusty-pink · chromatic-burgundy
+ * studied: no · context: user brief
+ */
+
+/*
+ * Семантические токены. Значения приходят из /styles/themes.css:
+ * тема задаёт сырые --base-*, --alt-* и --theme-*, а здесь они получают
+ * имена, по которым Tailwind строит утилиты (bg-paper, text-ink, font-display).
+ *
+ * static: переменные попадают в CSS всегда, а не только когда заняты в утилитах.
+ * Иначе токен, на который ссылается лишь CSS-модуль, был бы выброшен при сборке.
+ */
+@theme static {
+  --color-*: initial;
+  --color-paper: var(--base-paper);
+  --color-paper-2: var(--base-paper-2);
+  --color-ink: var(--base-ink);
+  --color-ink-2: var(--base-ink-2);
+  --color-muted: var(--base-muted);
+  --color-rule: var(--base-rule);
+  --color-accent: var(--base-accent);
+  --color-accent-ink: var(--base-accent-ink);
+  --color-accent-2: var(--base-accent-2);
+  --color-focus: var(--base-focus);
+  --color-gold: var(--theme-gold);
+  --color-gold-2: var(--theme-gold-2);
+  --color-gold-deep: var(--theme-gold-deep);
+  --color-envelope: var(--theme-envelope);
+  --color-envelope-fold: var(--theme-envelope-fold);
+  --color-envelope-flap: var(--theme-envelope-flap);
+  --color-envelope-lining: var(--theme-envelope-lining);
+  --color-seal: var(--theme-seal);
+  --color-seal-light: var(--theme-seal-light);
+  --color-seal-dark: var(--theme-seal-dark);
+  --color-petal-1: var(--theme-petal-1);
+  --color-petal-2: var(--theme-petal-2);
+  --color-petal-3: var(--theme-petal-3);
+
+  --font-*: initial;
+  --font-display: var(--theme-font-display);
+  --font-body: var(--theme-font-body);
+  --font-script: var(--theme-font-script);
+  --default-font-family: var(--font-body);
+
+  /* Шаг 1.25 от 18px: Cormorant мелкий, на 16px на бюджетном экране не читается. */
+  --text-*: initial;
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.4;
+  --text-sm: 0.9375rem;
+  --text-sm--line-height: 1.45;
+  --text-base: 1.125rem;
+  --text-base--line-height: 1.55;
+  --text-md: 1.375rem;
+  --text-md--line-height: 1.4;
+  --text-lg: 1.75rem;
+  --text-lg--line-height: 1.2;
+  --text-xl: 2.1875rem;
+  --text-xl--line-height: 1.12;
+  --text-display: clamp(2.5rem, 9vw + 0.5rem, 3.75rem);
+  --text-display--line-height: 1.05;
+
+  /* Сетка 4pt: p-4 = 1rem. Ниже именованные отступы страницы. */
+  --spacing: 0.25rem;
+  --spacing-gutter: clamp(1rem, 5vw, 1.5rem);
+  --spacing-section: clamp(3.5rem, 16vw, 5.5rem);
+
+  /* Колонка приглашения: на десктопе остаётся шириной с телефон. */
+  --container-invite: 30rem;
+
+  --radius-*: initial;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.5rem;
+  --radius-pill: 999px;
+
+  --ease-*: initial;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+:root {
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
+  --dur-long: 420ms;
+
+  /* Кнопки языка и музыки остаются поверх конверта. */
+  --z-base: 0;
+  --z-raised: 10;
+  --z-effects: 20;
+  --z-intro: 30;
+  --z-controls: 40;
+
+  /* Бесшовное зерно бумаги: полупрозрачные точки, ложатся на любой цвет поверхности. */
+  --paper-texture: url('/textures/paper.png');
+  --paper-texture-size: 128px 128px;
+}

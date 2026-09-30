@@ -1,0 +1,107 @@
+@import 'tailwindcss';
+@import '../styles/tokens.css';
+@import '../styles/themes.css';
+
+@layer base {
+  /* clip, а не hidden: hidden делает корень скролл-контейнером и ломает position: sticky. */
+  html,
+  body {
+    overflow-x: clip;
+    /* Горизонтальный свайп не должен уводить «назад»: гость стирает золотой слой пальцем. */
+    overscroll-behavior-x: none;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    min-height: 100dvh;
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: 500;
+    line-height: var(--text-base--line-height);
+    font-variant-numeric: lining-nums;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Любая поверхность — бумага с зерном. У <html> это фон всей страницы. */
+  [data-theme],
+  [data-surface] {
+    background-color: var(--color-paper);
+    background-image: var(--paper-texture);
+    background-size: var(--paper-texture-size);
+    color: var(--color-ink);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: var(--heading-weight);
+    font-style: normal;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Кольцо фокуса появляется сразу, без перехода. */
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 150ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 150ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Имена пары: рукописные в romantic, прописные с разрядкой в national. */
+  .names {
+    font-family: var(--font-script);
+    font-size: var(--names-size);
+    font-weight: 400;
+    line-height: var(--names-leading);
+    text-transform: var(--names-transform);
+    letter-spacing: var(--names-tracking);
+  }
+
+  /*
+   * Строка имени в SVG: буквы можно обвести по контуру. --fit уменьшает кегль
+   * для длинных имён, его выставляет HandwrittenName после измерения.
+   */
+  .names-line {
+    display: block;
+    width: 100%;
+    height: calc(var(--names-size) * var(--fit, 1) * var(--names-leading));
+    overflow: visible;
+    font-size: calc(var(--names-size) * var(--fit, 1));
+  }
+
+  .names-line text {
+    fill: currentColor;
+  }
+
+  /* Обводка есть всегда, но видна только пока буква «пишется». */
+  .names-line [data-letter] {
+    stroke: currentColor;
+    stroke-opacity: 0;
+    stroke-width: 0.014em;
+  }
+}

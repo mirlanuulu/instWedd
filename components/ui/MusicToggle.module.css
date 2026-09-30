@@ -1,0 +1,68 @@
+.button {
+  animation: appear var(--dur-long) var(--ease-out) both;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+}
+
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 1rem;
+}
+
+.bar {
+  width: 3px;
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background-color: currentColor;
+  transform: scaleY(0.22);
+  transform-origin: 50% 100%;
+  transition: transform var(--dur-short) var(--ease-out);
+}
+
+/* Музыка играет: столбики качаются. Индикатор состояния, а не украшение. */
+.playing .bar {
+  animation: bounce 1.1s var(--ease-in-out) infinite alternate;
+}
+
+.playing .bar:nth-child(1) {
+  animation-delay: -0.9s;
+}
+
+.playing .bar:nth-child(2) {
+  animation-delay: -0.35s;
+}
+
+.playing .bar:nth-child(3) {
+  animation-delay: -0.65s;
+}
+
+.playing .bar:nth-child(4) {
+  animation-delay: -0.1s;
+}
+
+@keyframes bounce {
+  from {
+    transform: scaleY(0.25);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* Без движения состояние читается по высоте столбиков. */
+@media (prefers-reduced-motion: reduce) {
+  .playing .bar {
+    animation: none;
+    transform: scaleY(0.8);
+  }
+
+  .playing .bar:nth-child(odd) {
+    transform: scaleY(0.5);
+  }
+}

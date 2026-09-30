@@ -1,0 +1,190 @@
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-intro);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background-color: var(--color-paper);
+  background-image: var(--paper-texture);
+  background-size: var(--paper-texture-size);
+}
+
+/* Письмо уже растворяется: страница под ним должна принимать касания. */
+.intro[data-phase='opened'] {
+  pointer-events: none;
+}
+
+.trigger {
+  /* Третье ограничение держит конверт в кадре на низких и альбомных экранах. */
+  --env-w: min(86vw, 22rem, 70svh);
+  --env-h: calc(var(--env-w) / 1.5);
+
+  display: grid;
+  justify-items: center;
+  row-gap: calc(var(--env-h) * 0.24);
+  /* Клапан и письмо уходят вверх, поэтому конверт стоит ниже центра. */
+  margin-top: calc(var(--env-h) * 0.3);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.envelope {
+  position: relative;
+  display: block;
+  width: var(--env-w);
+  height: var(--env-h);
+  perspective: 900px;
+}
+
+.shadow,
+.back,
+.flap,
+.flapShadow,
+.letter,
+.pocket,
+.pocketBottom {
+  position: absolute;
+  display: block;
+}
+
+.shadow {
+  right: 3%;
+  bottom: -11%;
+  left: 3%;
+  z-index: 0;
+  height: 22%;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--color-ink) 22%, transparent),
+    transparent
+  );
+}
+
+/* Внутренняя сторона конверта: видна, когда клапан поднят. */
+.back {
+  inset: 0;
+  z-index: 1;
+  background-color: var(--color-envelope-lining);
+}
+
+/*
+ * Клапан вращается вокруг верхнего края. preserve-3d нужен его двум сторонам,
+ * поэтому clip-path стоит на сторонах, а не на самом клапане: clip-path
+ * на родителе схлопнул бы 3D.
+ */
+.flap,
+.flapShadow {
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 60%;
+}
+
+.flap {
+  z-index: 6;
+  transform-origin: 50% 0;
+  transform-style: preserve-3d;
+}
+
+.flapFace {
+  position: absolute;
+  inset: 0;
+  display: block;
+  backface-visibility: hidden;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+.flapFront {
+  background: linear-gradient(to bottom, var(--color-envelope-flap), var(--color-envelope));
+}
+
+/* Изнанка развёрнута на 180° вокруг своего центра, поэтому её треугольник
+   задан зеркально: после разворота он совпадает с лицевой стороной. */
+.flapBack {
+  background-color: var(--color-envelope-lining);
+  clip-path: polygon(0 100%, 100% 100%, 50% 0);
+  transform: rotateX(180deg);
+}
+
+/* Тень закрытого клапана на кармане: та же форма, сдвинутая вниз. */
+.flapShadow {
+  z-index: 5;
+  background-color: var(--color-ink);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  opacity: 0.16;
+  transform: translateY(calc(var(--env-h) * 0.014));
+}
+
+/* Без зерна: письмо вырастает в несколько раз, и растянутое зерно стало бы пятнами. */
+.letter {
+  inset: 7% 5% 5%;
+  z-index: 3;
+  background-color: var(--color-paper);
+}
+
+/* Бумага письма того же цвета, что фон: без контура оно бы сливалось с ним.
+   Контур отдельным слоем, чтобы погаснуть до того, как письмо вырастет. */
+.letterEdge {
+  position: absolute;
+  inset: 0;
+  display: block;
+  box-shadow:
+    0 0 0 1px var(--color-rule),
+    0 0.5rem 1.25rem color-mix(in oklab, var(--color-ink) 12%, transparent);
+}
+
+.letterInner {
+  position: absolute;
+  inset: calc(var(--env-w) * 0.028);
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  border: 1px solid var(--color-rule);
+  text-align: center;
+}
+
+.letterNames {
+  display: block;
+  font-size: calc(var(--env-w) * 0.1);
+  line-height: 1.1;
+}
+
+.letterAnd {
+  display: block;
+  margin-block: calc(var(--env-w) * 0.008);
+  color: var(--color-accent);
+  font-size: calc(var(--env-w) * 0.05);
+  line-height: 1;
+}
+
+.pocket,
+.pocketBottom {
+  inset: 0;
+  z-index: 4;
+}
+
+.pocket {
+  background-color: var(--color-envelope);
+  clip-path: polygon(0 0, 50% 54%, 100% 0, 100% 100%, 0 100%);
+}
+
+.pocketBottom {
+  background: linear-gradient(to top, var(--color-envelope-fold), var(--color-envelope));
+  clip-path: polygon(0 100%, 50% 46%, 100% 100%);
+}
+
+/* Подпись появляется после гидрации: до неё тап ничего не сделает. */
+.caption {
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+  letter-spacing: 0.18em;
+  opacity: 0;
+  text-transform: uppercase;
+  transition: opacity var(--dur-long) var(--ease-out);
+}
+
+.trigger[data-ready='true'] .caption {
+  opacity: 1;
+}

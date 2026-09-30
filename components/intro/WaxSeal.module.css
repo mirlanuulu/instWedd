@@ -1,0 +1,173 @@
+/* Печать стоит на кончике клапана. Размеры считаются от ширины конверта (--env-w). */
+.seal {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  z-index: 7;
+  display: block;
+  width: calc(var(--env-w) * 0.27);
+  aspect-ratio: 1;
+  margin: calc(var(--env-w) * -0.135) 0 0 calc(var(--env-w) * -0.135);
+}
+
+/* Пульс и расходящееся кольцо подсказывают, куда нажать. Останавливаются по тапу. */
+.pulsing {
+  animation: pulse 2s var(--ease-in-out) infinite;
+}
+
+.ring {
+  position: absolute;
+  inset: 4%;
+  border: 1.5px solid var(--color-seal);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.pulsing .ring {
+  animation: ring 2s var(--ease-out) infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+@keyframes ring {
+  0% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(1.75);
+  }
+}
+
+.shadow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--color-ink) 40%, transparent) 55%,
+    transparent
+  );
+  transform: translateY(8%) scale(1.06);
+}
+
+.body,
+.half,
+.face {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+/*
+ * Две половины одной печати: ломаная линия разлома общая. Левая заходит
+ * под правую на 1%, иначе на стыке двух clip-path просвечивает шов.
+ */
+.halfLeft {
+  clip-path: polygon(
+    -20% -20%,
+    53% -20%,
+    53% 3%,
+    47% 22%,
+    56% 38%,
+    48% 55%,
+    57% 72%,
+    50% 97%,
+    50% 120%,
+    -20% 120%
+  );
+}
+
+.halfRight {
+  clip-path: polygon(
+    120% -20%,
+    52% -20%,
+    52% 3%,
+    46% 22%,
+    55% 38%,
+    47% 55%,
+    56% 72%,
+    49% 97%,
+    49% 120%,
+    120% 120%
+  );
+}
+
+.face svg,
+.crack {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.wax {
+  fill: var(--color-seal);
+}
+
+.gloss {
+  fill: var(--color-seal-light);
+  opacity: 0.4;
+}
+
+.stamp {
+  fill: var(--color-seal-dark);
+  opacity: 0.14;
+}
+
+.rimDark {
+  fill: none;
+  stroke: var(--color-seal-dark);
+  stroke-width: 1.2;
+  opacity: 0.5;
+}
+
+.rimLight {
+  fill: none;
+  stroke: var(--color-seal-light);
+  stroke-width: 0.9;
+  opacity: 0.55;
+}
+
+.initials {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-seal-dark);
+  font-family: var(--font-display);
+  font-size: calc(var(--env-w) * 0.082);
+  font-synthesis: none;
+  font-weight: 600;
+  line-height: 1;
+  text-shadow: 0 1px 0 color-mix(in oklab, var(--color-seal-light) 75%, transparent);
+  text-transform: uppercase;
+}
+
+.amp {
+  margin-inline: 0.1em;
+  font-size: 0.6em;
+}
+
+.crack {
+  opacity: 0;
+}
+
+.crack polyline {
+  fill: none;
+  stroke: var(--color-seal-dark);
+  stroke-linejoin: round;
+  stroke-width: 1.4;
+}

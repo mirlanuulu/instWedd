@@ -1,0 +1,84 @@
+.layer {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-effects);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Бабочку по траектории ведёт GSAP; её исходная точка — левый верхний угол слоя. */
+.butterfly {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: var(--size);
+  height: var(--size);
+  margin: calc(var(--size) / -2) 0 0 calc(var(--size) / -2);
+  opacity: 0;
+}
+
+.wings {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+/*
+ * Перспектива даёт взмаху глубину: крыло уходит от зрителя, а не просто сужается.
+ * Она задана на прямом родителе крыла и смотрит из шарнира у тельца.
+ */
+.side {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  display: block;
+  width: 50%;
+  perspective: calc(var(--size) * 3);
+  perspective-origin: 0 50%;
+}
+
+/* Левое крыло — зеркало правого: рисунок и анимация одни и те же. */
+.sideLeft {
+  transform: scaleX(-1);
+  transform-origin: 0 50%;
+}
+
+.wing {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: 0 50%;
+  animation: flap var(--flap) var(--ease-in-out) infinite alternate;
+  animation-delay: var(--phase);
+}
+
+.wing path {
+  fill: currentColor;
+}
+
+.body {
+  position: absolute;
+  top: 22%;
+  bottom: 18%;
+  left: calc(50% - 0.75px);
+  display: block;
+  width: 1.5px;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-ink-2);
+}
+
+/* Слой ушёл с экрана: взмахи замирают вместе с полётом. */
+.paused .wing {
+  animation-play-state: paused;
+}
+
+@keyframes flap {
+  from {
+    transform: rotateY(8deg);
+  }
+  to {
+    transform: rotateY(74deg);
+  }
+}

@@ -1,0 +1,44 @@
+/* Окошко одной цифры: новая въезжает снизу, старая уходит вверх. */
+.slot {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.in {
+  display: block;
+  animation: roll-in var(--dur-long) var(--ease-out);
+}
+
+.out {
+  position: absolute;
+  inset: 0;
+  display: block;
+  animation: roll-out var(--dur-long) var(--ease-out) forwards;
+}
+
+@keyframes roll-in {
+  from {
+    opacity: 0;
+    transform: translateY(55%);
+  }
+}
+
+@keyframes roll-out {
+  to {
+    opacity: 0;
+    transform: translateY(-55%);
+  }
+}
+
+/* Без движения цифра просто меняется. */
+@media (prefers-reduced-motion: reduce) {
+  .in {
+    animation: none;
+  }
+
+  .out {
+    display: none;
+  }
+}
