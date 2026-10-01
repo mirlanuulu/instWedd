@@ -16,22 +16,6 @@ const MONTHS = [
   'декабры',
 ] as const;
 
-/** Над календарём месяц стоит сам по себе, в именительной форме. */
-const MONTHS_STANDALONE = [
-  'Январь',
-  'Февраль',
-  'Март',
-  'Апрель',
-  'Май',
-  'Июнь',
-  'Июль',
-  'Август',
-  'Сентябрь',
-  'Октябрь',
-  'Ноябрь',
-  'Декабрь',
-] as const;
-
 export const ky: Dictionary = {
   langLabel: 'Кыр',
   langName: 'Кыргызча',
@@ -53,12 +37,8 @@ export const ky: Dictionary = {
   date: {
     full: (day, monthIndex, year) => `${year}-жылдын ${day}-${MONTHS[monthIndex]}`,
     weekdays: ['жекшемби', 'дүйшөмбү', 'шейшемби', 'шаршемби', 'бейшемби', 'жума', 'ишемби'],
-    weekdaysShort: ['Жек', 'Дүй', 'Шей', 'Шар', 'Бей', 'Жум', 'Ише'],
-    monthYear: (monthIndex, year) => `${MONTHS_STANDALONE[monthIndex]} ${year}`,
     time: (time) => `саат ${time}`,
   },
-
-  calendar: { title: 'Күндү белгилеп коюңуз' },
 
   // После числительного существительное в кыргызском не меняется.
   countdown: {
