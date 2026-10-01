@@ -1,0 +1,303 @@
+/* Hallmark · route: custom (bespoke) · structure: лист кальки над приглашением на плотном картоне, вёрстка по левому краю
+ * idea: "с приглашения снимают кальку"
+ * paper: oklch(97.6% 0.006 85) · accent: нет, только чернила · display: Literata 200 (opsz) · body: Geist
+ * axes: light / roman-serif (тонкая) / neutral · contrast: pass (40–41) · studied: no · context: стиль назван пользователем
+ * gates: pass, кроме 39 — как в классике: фокус поля-строки — двойная линия снизу, а не outline;
+ *        место под ошибку не резервируется, чтобы форма не стояла с пустыми строками
+ */
+
+/*
+ * source(none): Tailwind сканирует только файлы минимализма. Иначе в CSS
+ * этой страницы попали бы утилиты классики и остальных стилей.
+ */
+@import 'tailwindcss' source(none);
+
+@source './';
+@source '../../app/minimal';
+
+@theme static {
+  --color-*: initial;
+  /* Хлопковый картон: тёплый белый, не #fff. */
+  --color-paper: oklch(97.6% 0.006 85);
+  --color-paper-2: oklch(94.6% 0.008 85);
+  --color-ink: oklch(22% 0.008 70);
+  --color-ink-2: oklch(40% 0.008 70);
+  --color-muted: oklch(50% 0.008 75);
+  /* Только декоративные линии: для границ полей не хватает контраста, там ink-2. */
+  --color-rule: oklch(86% 0.006 80);
+  /* Ошибки формы. Цвет здесь не единственный признак: рядом всегда текст. */
+  --color-signal: oklch(48% 0.13 30);
+
+  --font-*: initial;
+  --font-display: var(--font-literata), ui-serif, Georgia, serif;
+  --font-body: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --default-font-family: var(--font-body);
+
+  /* Пять кеглей на всю страницу. Иерархия дальше — весом и цветом. */
+  --text-*: initial;
+  --text-label: 0.75rem;
+  --text-label--line-height: 1.35;
+  --text-base: 1rem;
+  --text-base--line-height: 1.6;
+  --text-md: 1.25rem;
+  --text-md--line-height: 1.4;
+  --text-xl: clamp(1.625rem, 8vw + 0.1rem, 2rem);
+  --text-xl--line-height: 1.15;
+  --text-display: clamp(3.5rem, 17vw, 6rem);
+  --text-display--line-height: 1;
+
+  --spacing: 0.25rem;
+  --spacing-gutter: clamp(1.25rem, 6vw, 2.5rem);
+
+  /* Колонка приглашения: на десктопе остаётся шириной с открытку. */
+  --container-sheet: 34rem;
+
+  /* Углы прямые. Круг на странице один — отметка даты в календаре. */
+  --radius-*: initial;
+
+  --ease-*: initial;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+:root {
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
+  --dur-long: 420ms;
+  /* Лист кальки поднимается медленнее любого интерфейсного движения: это сцена, а не отклик. */
+  --dur-sheet: 900ms;
+
+  --z-base: 0;
+  --z-raised: 10;
+  --z-intro: 30;
+  --z-controls: 40;
+
+  /* Лента истории: первый кадр стоит по левому краю колонки, а сама лента идёт до краёв экрана. */
+  --reel-pad: max(var(--spacing-gutter), calc((100% - var(--container-sheet)) / 2 + var(--spacing-gutter)));
+}
+
+@layer base {
+  /* clip, а не hidden: hidden делает корень скролл-контейнером и ломает position: sticky. */
+  html,
+  body {
+    overflow-x: clip;
+    overscroll-behavior-x: none;
+  }
+
+  html {
+    color-scheme: light;
+    background-color: var(--color-paper);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    min-height: 100dvh;
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: 400;
+    line-height: var(--text-base--line-height);
+    font-variant-numeric: lining-nums;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-style: normal;
+    font-weight: 300;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  /* Кольцо фокуса появляется сразу, без перехода. */
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+
+  /* Полоса прокрутки на десктопе: тонкий прямоугольный ползунок, без украшений. */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: var(--color-paper-2);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-ink-2);
+    min-height: 48px;
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-ink-2) var(--color-paper-2);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 150ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 150ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Мелкие подписи прописными с разрядкой: название события, дни недели, цвета дресс-кода. */
+  .label {
+    font-size: var(--text-label);
+    line-height: var(--text-label--line-height);
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  /* Цифры дат и таймера стоят ровными колонками. */
+  .figures {
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  /*
+   * Калька. Матовый лист поверх первого экрана: сквозь него просвечивают
+   * имена, но не читаются. Зерно — едва заметные волокна, без картинки-файла.
+   */
+  .vellum {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-intro);
+    background-color: color-mix(in oklch, var(--color-paper) 72%, transparent);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.43 0 0 0 0 0.4 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23f)'/%3E%3C/svg%3E");
+    -webkit-backdrop-filter: blur(7px);
+    backdrop-filter: blur(7px);
+    /* Край листа: его видно, когда калька поднимается. */
+    border-bottom: 1px solid var(--color-rule);
+    box-shadow: 0 22px 32px -26px color-mix(in oklch, var(--color-ink) 40%, transparent);
+  }
+
+  /* Без размытия калька плотнее, иначе текст под ней спорил бы с подписью. */
+  @supports not (backdrop-filter: blur(1px)) {
+    .vellum {
+      background-color: color-mix(in oklch, var(--color-paper) 93%, transparent);
+    }
+  }
+
+  /* Пока калька лежит, первый экран чуть ниже: лист снимают, и текст «садится» на место. */
+  .settle {
+    transition: transform var(--dur-sheet) var(--ease-out);
+  }
+
+  .settle[data-sealed] {
+    transform: translateY(1rem);
+  }
+
+  /* Лента истории: кадры листаются пальцем и встают по левому краю колонки. */
+  .reel {
+    display: flex;
+    gap: calc(var(--spacing) * 3);
+    overflow-x: auto;
+    padding-inline: var(--reel-pad);
+    scroll-padding-inline: var(--reel-pad);
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+
+  .reel::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* С мышью листать пальцем нечем: полоса прокрутки возвращается. */
+  @media (hover: hover) and (pointer: fine) {
+    .reel {
+      scrollbar-width: thin;
+      padding-bottom: calc(var(--spacing) * 4);
+    }
+
+    .reel::-webkit-scrollbar {
+      display: block;
+      height: 4px;
+    }
+  }
+
+  .reel > li {
+    flex: 0 0 min(78%, 22rem);
+    scroll-snap-align: start;
+  }
+
+  /*
+   * Отметка даты: петля, как обводят число ручкой в календаре.
+   * Без JavaScript она нарисована сразу; data-armed прячет её до появления на экране.
+   */
+  .date-ring path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1.1s var(--ease-out);
+  }
+
+  .date-ring[data-armed] path {
+    stroke-dashoffset: 1;
+    transition: none;
+  }
+
+  /* Кнопка музыки: четыре волосяные полоски, пока играет — дышат. */
+  .music-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 0.875rem;
+  }
+
+  .music-bars span {
+    width: 1.5px;
+    height: 100%;
+    background-color: currentColor;
+    transform: scaleY(0.3);
+    transform-origin: bottom;
+  }
+
+  [data-playing] .music-bars span {
+    animation: bar 1.1s var(--ease-in-out) infinite alternate;
+  }
+
+  [data-playing] .music-bars span:nth-child(2) {
+    animation-delay: -0.45s;
+  }
+
+  [data-playing] .music-bars span:nth-child(3) {
+    animation-delay: -0.8s;
+  }
+
+  [data-playing] .music-bars span:nth-child(4) {
+    animation-delay: -0.2s;
+  }
+
+  @keyframes bar {
+    to {
+      transform: scaleY(1);
+    }
+  }
+}

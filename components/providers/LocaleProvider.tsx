@@ -9,9 +9,9 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { invite } from '@/config/invite';
 import type { Locale, Localized } from '@/config/types';
 import { dictionaries, type Dictionary } from '@/locales';
+import { useInvite } from './InviteProvider';
 
 const STORAGE_KEY = 'invite:locale';
 
@@ -26,8 +26,7 @@ interface LocaleContextValue {
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
-function asAvailableLocale(value: string | null): Locale | null {
-  const available: readonly string[] = invite.languages.available;
+function asAvailableLocale(value: string | null, available: readonly string[]): Locale | null {
   return value !== null && available.includes(value) ? (value as Locale) : null;
 }
 
@@ -49,15 +48,17 @@ function writeStored(locale: Locale) {
 }
 
 export function LocaleProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(invite.languages.default);
+  const { languages } = useInvite();
+  const [locale, setLocaleState] = useState<Locale>(languages.default);
 
   // Первый рендер совпадает с серверным (язык по умолчанию). Выбор гостя
   // подхватывается после гидрации: ?lang= из ссылки важнее сохранённого.
   useEffect(() => {
     const fromUrl = new URLSearchParams(window.location.search).get('lang');
-    const preferred = asAvailableLocale(fromUrl) ?? asAvailableLocale(readStored());
+    const preferred =
+      asAvailableLocale(fromUrl, languages.available) ?? asAvailableLocale(readStored(), languages.available);
     if (preferred) setLocaleState(preferred);
-  }, []);
+  }, [languages.available]);
 
   useEffect(() => {
     document.documentElement.lang = locale;

@@ -1,13 +1,14 @@
 'use client';
 
 import Image from 'next/image';
-import { invite } from '@/config/invite';
 import { mapLinks } from '@/lib/invite';
+import { useInvite } from '@/components/providers/InviteProvider';
 import { useLocale } from '@/components/providers/LocaleProvider';
 import { Button } from '@/components/ui/Button';
 import { Section, SectionHeading } from '@/components/ui/Section';
 
 export function Venue() {
+  const invite = useInvite();
   const { t, pick } = useLocale();
   const { venue } = invite;
   const links = mapLinks(venue);

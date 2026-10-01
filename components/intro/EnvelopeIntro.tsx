@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { invite } from '@/config/invite';
 import { loadMotion } from '@/lib/motionLoader';
 import { useIntro } from '@/components/providers/IntroProvider';
+import { useInvite } from '@/components/providers/InviteProvider';
 import { useLocale } from '@/components/providers/LocaleProvider';
 import { useMusic } from '@/components/providers/MusicProvider';
 import { WaxSeal } from './WaxSeal';
@@ -14,6 +14,7 @@ function initialOf(name: string): string {
 }
 
 export function EnvelopeIntro() {
+  const invite = useInvite();
   const { t, pick } = useLocale();
   const { phase, setPhase } = useIntro();
   const { start: startMusic } = useMusic();

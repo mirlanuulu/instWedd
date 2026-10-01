@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { invite } from '@/config/invite';
 import { fireConfetti } from '@/lib/confetti';
 import { formatEventDate } from '@/lib/invite';
+import { useInvite } from '@/components/providers/InviteProvider';
 import { useLocale } from '@/components/providers/LocaleProvider';
 import { Section, SectionHeading } from '@/components/ui/Section';
 
@@ -55,6 +55,7 @@ function paintFoil(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, wid
 }
 
 export function ScratchDate() {
+  const invite = useInvite();
   const { t } = useLocale();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [touched, setTouched] = useState(false);

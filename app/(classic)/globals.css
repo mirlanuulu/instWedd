@@ -1,6 +1,13 @@
-@import 'tailwindcss';
-@import '../styles/tokens.css';
-@import '../styles/themes.css';
+/*
+ * source(none): Tailwind не сканирует весь проект, а только файлы классической
+ * версии. Иначе в CSS этой страницы попали бы утилиты всех остальных стилей.
+ */
+@import 'tailwindcss' source(none);
+@import '../../styles/tokens.css';
+@import '../../styles/themes.css';
+
+@source './';
+@source '../../components';
 
 @layer base {
   /* clip, а не hidden: hidden делает корень скролл-контейнером и ломает position: sticky. */

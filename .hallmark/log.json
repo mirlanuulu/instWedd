@@ -1,5 +1,14 @@
 [
   {
+    "date": "2026-10-01",
+    "macrostructure": "bespoke: лист кальки над приглашением на картоне, вёрстка по левому краю",
+    "theme": "custom",
+    "theme_axes": "light / roman-serif (thin) / neutral",
+    "vibe": "хлопковый картон, калька, тонкая антиква, чернила",
+    "enrichment": "hand-built CSS/SVG: калька с зерном, рукописная петля вокруг даты",
+    "brief": "Toi invitation · стиль «Минимализм» (/minimal) на общем движке"
+  },
+  {
     "date": "2026-09-30",
     "macrostructure": "bespoke: envelope intro unfolding into a single-column invitation",
     "theme": "custom",

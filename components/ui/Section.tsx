@@ -1,6 +1,8 @@
+'use client';
+
 import type { ReactNode } from 'react';
-import { invite } from '@/config/invite';
 import { Ornament } from '@/components/effects/Ornament';
+import { useInvite } from '@/components/providers/InviteProvider';
 
 interface SectionProps {
   /** alt — контрастная поверхность темы: пудровая в romantic, бордовая в national. */
@@ -32,6 +34,7 @@ interface SectionHeadingProps {
 
 /** Заголовок секции. В теме national под ним прорисовывается орнамент. */
 export function SectionHeading({ id, align = 'start', children }: SectionHeadingProps) {
+  const invite = useInvite();
   const centered = align === 'center';
   return (
     <>

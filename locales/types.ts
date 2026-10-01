@@ -28,8 +28,14 @@ export interface Dictionary {
     full: (day: number, monthIndex: number, year: number) => string;
     /** Воскресенье = 0. */
     weekdays: readonly [string, string, string, string, string, string, string];
+    /** Шапка календаря. Воскресенье = 0. */
+    weekdaysShort: readonly [string, string, string, string, string, string, string];
+    /** Месяц и год над календарём: "Ноябрь 2026". */
+    monthYear: (monthIndex: number, year: number) => string;
     time: (time: string) => string;
   };
+
+  calendar: { title: string };
 
   countdown: {
     title: string;

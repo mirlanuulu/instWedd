@@ -1,10 +1,11 @@
 'use client';
 
-import { invite } from '@/config/invite';
 import { dictionaries } from '@/locales';
+import { useInvite } from '@/components/providers/InviteProvider';
 import { useLocale } from '@/components/providers/LocaleProvider';
 
 export function LanguageSwitcher() {
+  const invite = useInvite();
   const { locale, setLocale, t } = useLocale();
   const { available } = invite.languages;
 

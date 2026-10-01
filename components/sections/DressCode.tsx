@@ -1,10 +1,11 @@
 'use client';
 
-import { invite } from '@/config/invite';
+import { useInvite } from '@/components/providers/InviteProvider';
 import { useLocale } from '@/components/providers/LocaleProvider';
 import { Section, SectionHeading } from '@/components/ui/Section';
 
 export function DressCode() {
+  const invite = useInvite();
   const { t, pick } = useLocale();
   const { colors, note } = invite.dressCode;
 

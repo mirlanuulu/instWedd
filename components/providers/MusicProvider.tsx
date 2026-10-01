@@ -10,7 +10,7 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { invite } from '@/config/invite';
+import { useInvite } from './InviteProvider';
 
 /** idle — музыка ещё не запускалась, файл не загружен. */
 export type MusicStatus = 'idle' | 'playing' | 'paused';
@@ -28,6 +28,7 @@ const FADE_TOGGLE = 0.4;
 const MusicContext = createContext<MusicContextValue | null>(null);
 
 export function MusicProvider({ children }: { children: ReactNode }) {
+  const { music } = useInvite();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const fadeFrame = useRef(0);
   // Намерение гостя. Отличается от фактического состояния, пока вкладка свёрнута.
@@ -58,7 +59,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
       // Файл запрашивается только здесь: в вес первой загрузки музыка не входит.
       let audio = audioRef.current;
       if (!audio) {
-        audio = new Audio(invite.music.src);
+        audio = new Audio(music.src);
         audio.loop = true;
         audio.volume = 0;
         audioRef.current = audio;
@@ -67,13 +68,13 @@ export function MusicProvider({ children }: { children: ReactNode }) {
       setStatus('playing');
       audio
         .play()
-        .then(() => fadeTo(invite.music.volume, fade))
+        .then(() => fadeTo(music.volume, fade))
         .catch(() => {
           wantsMusic.current = false;
           setStatus('paused');
         });
     },
-    [fadeTo],
+    [fadeTo, music.src, music.volume],
   );
 
   const start = useCallback(() => {

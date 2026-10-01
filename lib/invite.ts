@@ -26,6 +26,31 @@ export function formatEventDate(event: EventInfo, t: Dictionary) {
   };
 }
 
+/** Порядок дней в шапке календаря: с понедельника. Числа — индексы Date.getDay(). */
+export const WEEK_FROM_MONDAY = [1, 2, 3, 4, 5, 6, 0] as const;
+
+/**
+ * Месяц события сеткой для календаря: недели с понедельника,
+ * пустые клетки до первого и после последнего числа — null.
+ */
+export function monthGrid(event: EventInfo) {
+  const [year = 0, month = 1, day = 1] = event.date.split('-').map(Number);
+  const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
+  // getUTCDay: воскресенье = 0. Сдвиг, чтобы неделя начиналась с понедельника.
+  const lead = (new Date(Date.UTC(year, month - 1, 1)).getUTCDay() + 6) % 7;
+
+  const cells: Array<number | null> = [
+    ...Array.from({ length: lead }, () => null),
+    ...Array.from({ length: daysInMonth }, (_, index) => index + 1),
+  ];
+  while (cells.length % 7 !== 0) cells.push(null);
+
+  const weeks: Array<Array<number | null>> = [];
+  for (let start = 0; start < cells.length; start += 7) weeks.push(cells.slice(start, start + 7));
+
+  return { year, monthIndex: month - 1, day, weeks };
+}
+
 export function mapLinks(venue: Venue) {
   const { lat, lng } = venue.coords;
   return {

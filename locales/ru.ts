@@ -15,6 +15,22 @@ const MONTHS = [
   'декабря',
 ] as const;
 
+/** Над календарём месяц стоит сам по себе, в именительном падеже. */
+const MONTHS_STANDALONE = [
+  'Январь',
+  'Февраль',
+  'Март',
+  'Апрель',
+  'Май',
+  'Июнь',
+  'Июль',
+  'Август',
+  'Сентябрь',
+  'Октябрь',
+  'Ноябрь',
+  'Декабрь',
+] as const;
+
 /** 1 день, 2 дня, 5 дней. */
 function plural(n: number, one: string, few: string, many: string): string {
   const mod10 = n % 10;
@@ -45,8 +61,12 @@ export const ru: Dictionary = {
   date: {
     full: (day, monthIndex, year) => `${day} ${MONTHS[monthIndex]} ${year}`,
     weekdays: ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'],
+    weekdaysShort: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+    monthYear: (monthIndex, year) => `${MONTHS_STANDALONE[monthIndex]} ${year}`,
     time: (time) => `в ${time}`,
   },
+
+  calendar: { title: 'Сохраните дату' },
 
   countdown: {
     title: 'До тоя осталось',

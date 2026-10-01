@@ -1,12 +1,13 @@
 'use client';
 
 import { useRef } from 'react';
-import { invite } from '@/config/invite';
 import { useMotion } from '@/lib/motionLoader';
+import { useInvite } from '@/components/providers/InviteProvider';
 import { useLocale } from '@/components/providers/LocaleProvider';
 import { Section, SectionHeading } from '@/components/ui/Section';
 
 export function Program() {
+  const invite = useInvite();
   const { t, pick } = useLocale();
   const motion = useMotion();
   const list = useRef<HTMLOListElement>(null);

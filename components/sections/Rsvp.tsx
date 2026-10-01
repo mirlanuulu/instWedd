@@ -1,16 +1,13 @@
 'use client';
 
-import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
-import { invite } from '@/config/invite';
+import { useEffect, useId } from 'react';
 import { fireConfetti } from '@/lib/confetti';
-import { RSVP_LIMITS, type RsvpPayload } from '@/lib/rsvp';
+import { RSVP_LIMITS } from '@/lib/rsvp';
+import { useRsvpForm } from '@/lib/useRsvpForm';
+import { useInvite } from '@/components/providers/InviteProvider';
 import { useLocale } from '@/components/providers/LocaleProvider';
 import { Button } from '@/components/ui/Button';
 import { Section, SectionHeading } from '@/components/ui/Section';
-
-type Status = 'idle' | 'sending' | 'error' | 'sent';
-
-const REQUEST_TIMEOUT = 15_000;
 
 const FIELD =
   'mt-1 w-full border-b border-ink-2 bg-transparent py-2 text-base text-ink placeholder:text-muted ' +
@@ -32,63 +29,22 @@ const STEP =
   'disabled:cursor-not-allowed disabled:opacity-40 disabled:active:scale-100';
 
 export function Rsvp() {
+  const invite = useInvite();
   const { t, locale } = useLocale();
   const ids = useId();
-  const nameRef = useRef<HTMLInputElement>(null);
-  const firstChoiceRef = useRef<HTMLInputElement>(null);
-  const thanksRef = useRef<HTMLDivElement>(null);
-  const trapRef = useRef<HTMLInputElement>(null);
+  const form = useRsvpForm({ locale, maxGuests: invite.rsvp.maxGuests });
+  const { refs, name, attending, guests, wish, invalid, status, sending, maxGuests } = form;
 
-  const [name, setName] = useState('');
-  const [attending, setAttending] = useState<boolean | null>(null);
-  const [guests, setGuests] = useState(1);
-  const [wish, setWish] = useState('');
-  const [invalid, setInvalid] = useState({ name: false, attending: false });
-  const [status, setStatus] = useState<Status>('idle');
-
-  const { maxGuests } = invite.rsvp;
-  const sending = status === 'sending';
-
-  // Форму сменил экран благодарности: фокус переходит на него, чтобы его прочитал скринридер.
+  // Конфетти только тем, кто придёт. После отправки формы уже нет, так что attending больше не меняется.
   useEffect(() => {
-    if (status !== 'sent' || !thanksRef.current) return;
-    thanksRef.current.focus({ preventScroll: true });
-    // Конфетти только тем, кто придёт.
-    if (attending) fireConfetti(thanksRef.current);
-    // После отправки формы уже нет, так что attending больше не меняется.
-  }, [status, attending]);
-
-  async function submit(event: FormEvent) {
-    event.preventDefault();
-    if (sending) return;
-
-    const problems = { name: name.trim() === '', attending: attending === null };
-    setInvalid(problems);
-    if (problems.name) return nameRef.current?.focus();
-    if (problems.attending || attending === null) return firstChoiceRef.current?.focus();
-
-    const payload: RsvpPayload = { name: name.trim(), attending, guests: attending ? guests : 0, wish: wish.trim(), locale };
-
-    setStatus('sending');
-    try {
-      const response = await fetch('/api/rsvp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...payload, trap: trapRef.current?.value ?? '' }),
-        signal: AbortSignal.timeout(REQUEST_TIMEOUT),
-      });
-      if (!response.ok) throw new Error(`RSVP failed: ${response.status}`);
-      setStatus('sent');
-    } catch {
-      setStatus('error');
-    }
-  }
+    if (status === 'sent' && attending && refs.thanks.current) fireConfetti(refs.thanks.current);
+  }, [status, attending, refs.thanks]);
 
   if (status === 'sent') {
     const thanks = attending ? t.rsvp.thanksYes : t.rsvp.thanksNo;
     return (
       <Section surface="alt" labelledBy="rsvp-title">
-        <div ref={thanksRef} tabIndex={-1} role="status" data-rsvp-thanks className="py-10 text-center outline-none">
+        <div ref={refs.thanks} tabIndex={-1} role="status" data-rsvp-thanks className="py-10 text-center outline-none">
           <h2 id="rsvp-title" className="text-xl">
             {thanks.title}
           </h2>
@@ -104,10 +60,10 @@ export function Rsvp() {
         {t.rsvp.title}
       </SectionHeading>
 
-      <form noValidate onSubmit={submit} className="mt-10 grid gap-8">
+      <form noValidate onSubmit={form.submit} className="mt-10 grid gap-8">
         {/* Ловушка для спам-ботов: человек это поле не видит и не заполняет, сервер такие ответы отбрасывает. */}
         <input
-          ref={trapRef}
+          ref={refs.trap}
           type="text"
           name="rsvp_check"
           tabIndex={-1}
@@ -121,16 +77,13 @@ export function Rsvp() {
             {t.rsvp.name}
           </label>
           <input
-            ref={nameRef}
+            ref={refs.name}
             id={`${ids}-name`}
             type="text"
             autoComplete="name"
             maxLength={RSVP_LIMITS.name}
             value={name}
-            onChange={(event) => {
-              setName(event.target.value);
-              if (invalid.name) setInvalid((current) => ({ ...current, name: false }));
-            }}
+            onChange={(event) => form.setName(event.target.value)}
             aria-invalid={invalid.name}
             aria-describedby={invalid.name ? `${ids}-name-error` : undefined}
             className={FIELD}
@@ -149,14 +102,11 @@ export function Rsvp() {
               <label key={String(option)} className={CHOICE}>
                 {/* Радио остаётся в потоке внутри подписи: выбор не дёргает прокрутку. */}
                 <input
-                  ref={option ? firstChoiceRef : undefined}
+                  ref={option ? refs.firstChoice : undefined}
                   type="radio"
                   name={`${ids}-attending`}
                   checked={attending === option}
-                  onChange={() => {
-                    setAttending(option);
-                    setInvalid((current) => ({ ...current, attending: false }));
-                  }}
+                  onChange={() => form.choose(option)}
                   className="absolute inset-0 cursor-pointer opacity-0"
                 />
                 {option ? t.rsvp.yes : t.rsvp.no}
@@ -180,7 +130,7 @@ export function Rsvp() {
                 type="button"
                 aria-label={t.rsvp.guestsLess}
                 disabled={guests <= 1}
-                onClick={() => setGuests((count) => Math.max(1, count - 1))}
+                onClick={form.removeGuest}
                 className={STEP}
               >
                 −
@@ -192,7 +142,7 @@ export function Rsvp() {
                 type="button"
                 aria-label={t.rsvp.guestsMore}
                 disabled={guests >= maxGuests}
-                onClick={() => setGuests((count) => Math.min(maxGuests, count + 1))}
+                onClick={form.addGuest}
                 className={STEP}
               >
                 +
@@ -211,7 +161,7 @@ export function Rsvp() {
             maxLength={RSVP_LIMITS.wish}
             placeholder={t.rsvp.wishPlaceholder}
             value={wish}
-            onChange={(event) => setWish(event.target.value)}
+            onChange={(event) => form.setWish(event.target.value)}
             className={`${FIELD} resize-none`}
           />
         </div>

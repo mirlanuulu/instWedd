@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef } from 'react';
-import { invite } from '@/config/invite';
 import { formatEventDate } from '@/lib/invite';
 import { useReducedMotion } from '@/lib/motion';
 import { useMotion } from '@/lib/motionLoader';
@@ -9,11 +8,12 @@ import { HandwrittenName } from '@/components/effects/HandwrittenName';
 import { Ornament } from '@/components/effects/Ornament';
 import { Petals } from '@/components/effects/Petals';
 import { useIntro } from '@/components/providers/IntroProvider';
+import { useInvite } from '@/components/providers/InviteProvider';
 import { useLocale } from '@/components/providers/LocaleProvider';
 
-const romantic = invite.theme === 'romantic';
-
 export function Hero() {
+  const invite = useInvite();
+  const romantic = invite.theme === 'romantic';
   const { t, pick, locale } = useLocale();
   const { phase } = useIntro();
   const reduced = useReducedMotion();
