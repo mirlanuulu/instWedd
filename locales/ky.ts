@@ -82,7 +82,7 @@ export const ky: Dictionary = {
   dressCode: { title: 'Дресс-код' },
 
   rsvp: {
-    title: 'Келесизби?',
+    title: 'Конок анкетасы',
     name: 'Аты-жөнүңүз',
     guests: 'Канча киши келесиздер',
     guestsLess: 'Конокторду азайтуу',

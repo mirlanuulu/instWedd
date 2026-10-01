@@ -89,7 +89,7 @@ export const ru: Dictionary = {
   dressCode: { title: 'Дресс-код' },
 
   rsvp: {
-    title: 'Вы придёте?',
+    title: 'Анкета гостя',
     name: 'Ваше имя',
     guests: 'Сколько вас будет',
     guestsLess: 'Меньше гостей',

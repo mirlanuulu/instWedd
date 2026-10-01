@@ -66,7 +66,7 @@ export function Hero() {
   );
 
   return (
-    <header ref={root} className="g-hero">
+    <header ref={root} id="top" className="g-hero">
       <p className="g-eyebrow" data-hero-in>
         {pick(invite.event.title)}
       </p>

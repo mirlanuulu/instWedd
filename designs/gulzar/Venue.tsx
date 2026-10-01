@@ -6,7 +6,10 @@ import { useLocale } from '@/components/providers/LocaleProvider';
 import { mapLinks } from '@/lib/invite';
 import { GardenSection } from './GardenSection';
 
-/** Место тоя: фото зала в золотой рамке, адрес и две карты. */
+/**
+ * Место тоя: бумажная карточка — фото зала в золотой рамке, адрес и две карты.
+ * На бумаге текст читается при любом цвете неба, даже когда наступает вечер.
+ */
 export function Venue() {
   const { venue } = useInvite();
   const { pick, t } = useLocale();
@@ -14,24 +17,26 @@ export function Venue() {
 
   return (
     <GardenSection id="venue" flower="headGallica" title={t.venue.title}>
-      <figure className="g-venue">
-        <div className="g-venue-photo">
-          <Image src={venue.photo.src} alt={pick(venue.photo.alt)} fill sizes="(max-width: 34rem) 86vw, 30rem" />
+      <div className="g-venue-card">
+        <figure className="g-venue">
+          <div className="g-venue-photo">
+            <Image src={venue.photo.src} alt={pick(venue.photo.alt)} fill sizes="(max-width: 34rem) 80vw, 28rem" />
+          </div>
+          <figcaption className="g-venue-text">
+            <span className="g-venue-name">{pick(venue.name)}</span>
+            <span className="g-venue-address">
+              {pick(venue.address)}, {pick(venue.city)}
+            </span>
+          </figcaption>
+        </figure>
+        <div className="g-venue-links">
+          <a className="g-button" href={links.twoGis} target="_blank" rel="noopener noreferrer">
+            {t.venue.open2gis}
+          </a>
+          <a className="g-button g-button-quiet" href={links.googleMaps} target="_blank" rel="noopener noreferrer">
+            {t.venue.openGoogle}
+          </a>
         </div>
-        <figcaption className="g-venue-text">
-          <span className="g-venue-name">{pick(venue.name)}</span>
-          <span className="g-venue-address">
-            {pick(venue.address)}, {pick(venue.city)}
-          </span>
-        </figcaption>
-      </figure>
-      <div className="g-venue-links">
-        <a className="g-button" href={links.twoGis} target="_blank" rel="noopener noreferrer">
-          {t.venue.open2gis}
-        </a>
-        <a className="g-button g-button-quiet" href={links.googleMaps} target="_blank" rel="noopener noreferrer">
-          {t.venue.openGoogle}
-        </a>
       </div>
     </GardenSection>
   );

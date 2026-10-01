@@ -43,4 +43,6 @@ export const FLOWERS = {
 export type FlowerName = keyof typeof FLOWERS;
 
 /** Фото пары для демо: Алмаз Нуржанов, Unsplash (лицензия Unsplash), Алматы. */
+// Вечерние огни (public/gulzar/evening-lights.webp): Henry Söderlund, CC BY 2.0 —
+// автор указан внизу страницы (Credits.tsx), как требует лицензия.
 export const COUPLE_PHOTO = { src: '/gulzar/couple-arch.webp', w: 1000, h: 1250 };

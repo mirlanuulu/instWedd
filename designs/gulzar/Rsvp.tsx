@@ -57,7 +57,7 @@ export function Rsvp() {
   if (status === 'sent') {
     const thanks = t.rsvp.thanksYes;
     return (
-      <GardenSection id="rsvp" flower="headPink" title={t.rsvp.title}>
+      <GardenSection id="rsvp" flower="headPink" title={t.rsvp.title} tone="dusk">
         <div ref={refs.thanks} tabIndex={-1} role="status" className="g-thanks">
           <p className="g-thanks-title">{thanks.title}</p>
           <p className="g-thanks-text">{thanks.text}</p>
@@ -67,7 +67,7 @@ export function Rsvp() {
   }
 
   return (
-    <GardenSection id="rsvp" flower="headPink" title={t.rsvp.title}>
+    <GardenSection id="rsvp" flower="headPink" title={t.rsvp.title} tone="dusk">
       <form noValidate onSubmit={form.submit} className="g-form">
         {/* Ловушка для спам-ботов: человек это поле не видит, сервер такие ответы отбрасывает. */}
         <input ref={refs.trap} type="text" name="rsvp_check" tabIndex={-1} autoComplete="off" aria-hidden className="sr-only" />
