@@ -22,3 +22,5 @@ TTF-копии шрифтов приглашения. Нужны только п
 | `Playfair-BlackCondensed.ttf` | Playfair, вес 900, узкая ширина 87.5, оптический размер 144 | эдиториал: шапка, иконка |
 | `Playfair-Display.ttf` | Playfair, вес 400, оптический размер 144 | эдиториал: имена |
 | `SourceSerif4-SemiBold.ttf` | Source Serif 4, вес 600 | эдиториал: капители |
+| `Onest-ExtraBold.ttf` | Onest, вес 800 | гротеск: цифры, имена, иконка |
+| `Onest-SemiBold.ttf` | Onest, вес 600 | гротеск: подписи |

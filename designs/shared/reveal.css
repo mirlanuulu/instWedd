@@ -1,0 +1,222 @@
+/*
+ * Общие эффекты появления для всех стилей. Подключается в CSS стиля через @import.
+ *
+ * Элемент с data-reveal="…" прячется, только когда у предка есть
+ * data-reveal-ready (его ставит useReveal после гидрации). Без JavaScript
+ * всё видно сразу. Когда элемент въезжает в экран, useReveal ставит
+ * data-shown, и он проигрывает своё появление один раз.
+ *
+ * Задержка — style={{ '--d': '120ms' }} на элементе, порядковый номер буквы — --i.
+ * Цвета берутся из токенов стиля: --color-accent, --color-paper.
+ */
+
+:root {
+  --reveal-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Пружинка только для декоративного «выпрыгивания», не для кнопок. */
+  --reveal-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+[data-reveal] {
+  transition-delay: var(--d, 0ms);
+  animation-delay: var(--d, 0ms);
+}
+
+/* up — подъём с проявлением. */
+[data-reveal-ready] [data-reveal='up']:not([data-shown]) {
+  opacity: 0;
+  transform: translateY(1.75rem);
+}
+
+[data-reveal='up'] {
+  transition:
+    opacity 700ms var(--reveal-ease),
+    transform 900ms var(--reveal-ease);
+}
+
+/* slide — выезд слева. */
+[data-reveal-ready] [data-reveal='slide']:not([data-shown]) {
+  opacity: 0;
+  transform: translateX(-2.5rem);
+}
+
+[data-reveal='slide'] {
+  transition:
+    opacity 600ms var(--reveal-ease),
+    transform 800ms var(--reveal-ease);
+}
+
+/* pop — выпрыгивает с лёгкой пружинкой. */
+[data-reveal-ready] [data-reveal='pop']:not([data-shown]) {
+  opacity: 0;
+  transform: scale(0.55);
+}
+
+[data-reveal='pop'] {
+  transition:
+    opacity 400ms var(--reveal-ease),
+    transform 650ms var(--reveal-pop);
+}
+
+/* mask — строка выезжает снизу из-под невидимой кромки. */
+[data-reveal='mask'] {
+  display: block;
+  overflow: hidden;
+  /* Запас снизу, чтобы кромка не срезала хвосты букв. */
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+[data-reveal='mask'] > * {
+  display: block;
+  transition: transform 1000ms var(--reveal-ease);
+  transition-delay: var(--d, 0ms);
+}
+
+[data-reveal-ready] [data-reveal='mask']:not([data-shown]) > * {
+  transform: translateY(105%);
+}
+
+/* curtain — фото открывается снизу вверх, снимок внутри чуть «отъезжает». */
+[data-reveal='curtain'] {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 1100ms var(--reveal-ease);
+}
+
+[data-reveal='curtain'] img {
+  transition: transform 1600ms var(--reveal-ease);
+  transition-delay: var(--d, 0ms);
+}
+
+[data-reveal-ready] [data-reveal='curtain']:not([data-shown]) {
+  clip-path: inset(100% 0 0 0);
+}
+
+[data-reveal-ready] [data-reveal='curtain']:not([data-shown]) img {
+  transform: scale(1.25);
+}
+
+/* bar — цветная шторка пробегает по заголовку и открывает текст. */
+[data-reveal='bar'] {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+[data-reveal='bar']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  pointer-events: none;
+}
+
+[data-reveal-ready] [data-reveal='bar']:not([data-shown]) {
+  color: transparent;
+}
+
+[data-reveal='bar'][data-shown] {
+  animation: bar-text 900ms linear both;
+  animation-delay: var(--d, 0ms);
+}
+
+[data-reveal='bar'][data-shown]::after {
+  animation: bar-sweep 900ms var(--reveal-ease) both;
+  animation-delay: var(--d, 0ms);
+}
+
+@keyframes bar-sweep {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+  48% {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+  52% {
+    transform: scaleX(1);
+    transform-origin: right center;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right center;
+  }
+}
+
+/* Текст под шторкой появляется ровно в середине пробега. */
+@keyframes bar-text {
+  0%,
+  49% {
+    color: transparent;
+  }
+}
+
+/* letters — буквы вылетают по одной снизу с поворотом. Порядок — --i. */
+.reveal-letter {
+  display: inline-block;
+  transition:
+    opacity 500ms var(--reveal-ease),
+    transform 800ms var(--reveal-pop);
+  transition-delay: calc(var(--d, 0ms) + var(--i, 0) * 55ms);
+}
+
+[data-reveal-ready] [data-reveal='letters']:not([data-shown]) .reveal-letter {
+  opacity: 0;
+  transform: translateY(0.6em) rotate(8deg);
+}
+
+/* Табло: новая цифра въезжает снизу, старая уходит вверх. */
+.roll-slot {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.roll-in {
+  display: block;
+  animation: roll-in 420ms var(--reveal-ease);
+}
+
+.roll-out {
+  position: absolute;
+  inset: 0;
+  display: block;
+  animation: roll-out 420ms var(--reveal-ease) forwards;
+}
+
+@keyframes roll-in {
+  from {
+    opacity: 0;
+    transform: translateY(60%);
+  }
+}
+
+@keyframes roll-out {
+  to {
+    opacity: 0;
+    transform: translateY(-60%);
+  }
+}
+
+/* Без движения — только проявление, без сдвигов и пружин. */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal-ready] [data-reveal]:not([data-shown]),
+  [data-reveal-ready] [data-reveal]:not([data-shown]) > *,
+  [data-reveal-ready] [data-reveal]:not([data-shown]) img,
+  [data-reveal-ready] [data-reveal='letters']:not([data-shown]) .reveal-letter {
+    transform: none;
+    clip-path: none;
+  }
+
+  [data-reveal='bar']::after,
+  .roll-out {
+    display: none;
+  }
+
+  .roll-in {
+    animation: none;
+  }
+}

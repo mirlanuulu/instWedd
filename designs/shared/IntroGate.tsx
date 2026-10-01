@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useIntro } from '@/components/providers/IntroProvider';
+import { useReveal } from './reveal';
 
 interface IntroGateProps {
   children: ReactNode;
@@ -17,11 +18,16 @@ interface IntroGateProps {
  */
 export function IntroGate({ children, footer }: IntroGateProps) {
   const { phase } = useIntro();
+  const rootRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLElement>(null);
   // Без JavaScript интро не снять, поэтому inert ставится только после гидрации.
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => setHydrated(true), []);
+
+  // Эффекты появления включаются, как только интро начали снимать: первый экран
+  // проигрывает своё появление, пока уходит калька, обложка или панель.
+  useReveal(rootRef, phase !== 'sealed');
 
   // Кнопка интро исчезла: фокус переходит к приглашению, а не сбрасывается в начало документа.
   useEffect(() => {
@@ -29,7 +35,7 @@ export function IntroGate({ children, footer }: IntroGateProps) {
   }, [phase]);
 
   return (
-    <div inert={hydrated && phase !== 'opened'}>
+    <div ref={rootRef} inert={hydrated && phase !== 'opened'}>
       <main ref={mainRef} tabIndex={-1} style={{ outline: 'none' }}>
         {children}
       </main>

@@ -1,6 +1,15 @@
 [
   {
     "date": "2026-10-01",
+    "macrostructure": "bespoke: швейцарский плакат, цифры даты на модульной сетке",
+    "theme": "custom",
+    "theme_axes": "light / grotesk-sans / cool",
+    "vibe": "кобальт, сетка, огромные цифры, жёлтый салют",
+    "enrichment": "CSS/JS: табло, шторки на заголовках, занавес на фото, буквы имён, конфетти",
+    "brief": "Toi invitation · стиль «Гротеск» (/grotesk); пользователь попросил больше эффектов для обычных гостей"
+  },
+  {
+    "date": "2026-10-01",
     "macrostructure": "bespoke: обложка журнала перелистывается, внутри журнальная полоса с линейками",
     "theme": "custom",
     "theme_axes": "light / high-contrast-serif / warm",
