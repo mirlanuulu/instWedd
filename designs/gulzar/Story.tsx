@@ -13,10 +13,10 @@ const PRESSED = [FLOWERS.headBlossom, FLOWERS.headWild];
 /** История пары — листы гербария: фото на бумажном скотче, подпись от руки. */
 export function Story() {
   const { story } = useInvite();
-  const { pick } = useLocale();
+  const { pick, t } = useLocale();
 
   return (
-    <GardenSection id="story">
+    <GardenSection id="story" flower="headBlossom" title={t.story.title}>
       <ol className="g-herbarium">
         {story.map((item, i) => {
           const pressed = i % 2 === 1 ? PRESSED[((i - 1) / 2) % PRESSED.length] : null;

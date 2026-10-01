@@ -21,7 +21,7 @@ export function Countdown() {
   ];
 
   return (
-    <GardenSection id="countdown">
+    <GardenSection id="countdown" flower="headWild" title={t.countdown.title}>
       <div ref={root} className="g-countdown" role="timer" aria-live="off">
         {started ? (
           <p className="g-countdown-started">{t.countdown.started}</p>

@@ -7,10 +7,10 @@ import { GardenSection } from './GardenSection';
 /** Программа дня: время крупно, рядом — что происходит. */
 export function Program() {
   const { program } = useInvite();
-  const { pick } = useLocale();
+  const { pick, t } = useLocale();
 
   return (
-    <GardenSection id="program">
+    <GardenSection id="program" flower="headChina" title={t.program.title}>
       <ol className="g-program">
         {program.map((item) => (
           <li key={item.time + item.title.ru} className="g-program-item">

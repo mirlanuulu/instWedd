@@ -6,10 +6,7 @@ import { useInvite } from '@/components/providers/InviteProvider';
 import { useLocale } from '@/components/providers/LocaleProvider';
 import { RSVP_LIMITS } from '@/lib/rsvp';
 import { useRsvpForm } from '@/lib/useRsvpForm';
-import { BouquetArt } from './BouquetArt';
-import { useBouquet } from './BouquetProvider';
 import { GardenSection } from './GardenSection';
-import { GULZAR_TEXTS } from './texts';
 
 /** Пара вариантов-«таблеток»: радио внутри подписи, выбор не дёргает прокрутку. */
 function Choice<T extends string>({
@@ -46,28 +43,22 @@ function Choice<T extends string>({
 }
 
 /**
- * Финал: букет, который гость собрал, и ответ. Букет уходит паре вместе
- * с ответом — в сообщении стоит, сколько в нём цветов.
+ * Ответ гостя. Вопроса «приду / не смогу» нет: отправленный ответ и значит «приду».
+ * Гость отмечает, чей он гость — кыз тарап или бала тарап.
  */
 export function Rsvp() {
   const invite = useInvite();
   const { t, locale } = useLocale();
-  const g = GULZAR_TEXTS[locale];
-  const { picked } = useBouquet();
   const ids = useId();
   const askSide = invite.rsvp.sides.ask;
-  const form = useRsvpForm({ locale, maxGuests: invite.rsvp.maxGuests, askSide, flowers: picked.size, attendance: 'yes' });
+  const form = useRsvpForm({ locale, maxGuests: invite.rsvp.maxGuests, askSide, attendance: 'yes' });
   const { refs, name, side, attending, guests, wish, invalid, status, sending, maxGuests } = form;
-
-  const bouquet = <BouquetArt picked={picked} sizes="(max-width: 34rem) 40vw, 9rem" className="g-finale-bouquet" />;
 
   if (status === 'sent') {
     const thanks = t.rsvp.thanksYes;
     return (
-      <GardenSection id="rsvp">
+      <GardenSection id="rsvp" flower="headPink" title={t.rsvp.title}>
         <div ref={refs.thanks} tabIndex={-1} role="status" className="g-thanks">
-          {bouquet}
-          <p className="g-finale-title">{g.thanksBouquet}</p>
           <p className="g-thanks-title">{thanks.title}</p>
           <p className="g-thanks-text">{thanks.text}</p>
         </div>
@@ -76,13 +67,7 @@ export function Rsvp() {
   }
 
   return (
-    <GardenSection id="rsvp">
-      <div className="g-finale">
-        {bouquet}
-        <p className="g-finale-title">{g.finaleTitle}</p>
-        <p className="g-finale-text">{g.finaleText}</p>
-      </div>
-
+    <GardenSection id="rsvp" flower="headPink" title={t.rsvp.title}>
       <form noValidate onSubmit={form.submit} className="g-form">
         {/* Ловушка для спам-ботов: человек это поле не видит, сервер такие ответы отбрасывает. */}
         <input ref={refs.trap} type="text" name="rsvp_check" tabIndex={-1} autoComplete="off" aria-hidden className="sr-only" />
@@ -164,7 +149,7 @@ export function Rsvp() {
 
         <div className="g-submit">
           <button type="submit" className="g-open g-open-still" aria-busy={sending} disabled={sending}>
-            {sending ? t.rsvp.sending : g.submit}
+            {sending ? t.rsvp.sending : t.rsvp.submit}
           </button>
           <p role="alert" className="g-error">
             {status === 'error' ? t.rsvp.error : ''}

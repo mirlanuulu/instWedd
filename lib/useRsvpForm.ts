@@ -13,8 +13,6 @@ interface RsvpFormOptions {
   maxGuests: number;
   /** Спрашивать, чей гость: кыз тарап или бала тарап. */
   askSide: boolean;
-  /** Сколько цветов гость собрал в букет — уходит паре вместе с ответом. */
-  flowers?: number;
   /**
    * 'ask' — гость выбирает «приду / не смогу»; 'yes' — вопроса нет,
    * отправленный ответ и значит «приду».
@@ -32,7 +30,7 @@ function sideFromUrl(): Side | null {
  * Состояние и отправка формы RSVP. Логика общая для всех стилей,
  * вёрстка у каждого своя: refs из хука вешаются на поля формы.
  */
-export function useRsvpForm({ locale, maxGuests, askSide, flowers, attendance = 'ask' }: RsvpFormOptions) {
+export function useRsvpForm({ locale, maxGuests, askSide, attendance = 'ask' }: RsvpFormOptions) {
   const nameRef = useRef<HTMLInputElement>(null);
   const firstChoiceRef = useRef<HTMLInputElement>(null);
   const firstSideRef = useRef<HTMLInputElement>(null);
@@ -94,7 +92,6 @@ export function useRsvpForm({ locale, maxGuests, askSide, flowers, attendance = 
       wish: wish.trim(),
       locale,
       side: askSide ? side : null,
-      ...(flowers !== undefined && { flowers }),
     };
 
     setStatus('sending');

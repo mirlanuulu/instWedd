@@ -102,7 +102,5 @@ export interface Dictionary {
     language: string;
     /** Сторона первой строкой сообщения. */
     sides: { kyz: string; bala: string };
-    /** «Гүлдесте: 6 гүл» — сколько цветов гость собрал в букет. */
-    bouquet: (n: number) => string;
   };
 }

@@ -13,7 +13,7 @@ export function Venue() {
   const links = mapLinks(venue);
 
   return (
-    <GardenSection id="venue">
+    <GardenSection id="venue" flower="headGallica" title={t.venue.title}>
       <figure className="g-venue">
         <div className="g-venue-photo">
           <Image src={venue.photo.src} alt={pick(venue.photo.alt)} fill sizes="(max-width: 34rem) 86vw, 30rem" />

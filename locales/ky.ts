@@ -130,6 +130,5 @@ export const ky: Dictionary = {
     wish: 'Каалоо-тилек',
     language: 'форманын тили',
     sides: { kyz: 'Кыз тарап', bala: 'Бала тарап' },
-    bouquet: (n) => `Гүлдесте: ${n} гүл`,
   },
 };

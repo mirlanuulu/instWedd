@@ -28,7 +28,6 @@ export function formatRsvpMessage(rsvp: RsvpPayload): string {
   );
   if (rsvp.attending) lines.push(`${t.telegram.guests}: ${rsvp.guests}`);
   if (rsvp.wish) lines.push(`${t.telegram.wish}: ${escapeHtml(rsvp.wish)}`);
-  if (rsvp.flowers) lines.push(`💐 ${t.telegram.bouquet(rsvp.flowers)}`);
 
   // Подпись с именами пары: один бот может обслуживать несколько приглашений.
   lines.push(
