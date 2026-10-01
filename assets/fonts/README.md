@@ -24,3 +24,5 @@ TTF-копии шрифтов приглашения. Нужны только п
 | `SourceSerif4-SemiBold.ttf` | Source Serif 4, вес 600 | эдиториал: капители |
 | `Onest-ExtraBold.ttf` | Onest, вес 800 | гротеск: цифры, имена, иконка |
 | `Onest-SemiBold.ttf` | Onest, вес 600 | гротеск: подписи |
+| `IBMPlexMono-Bold.ttf` | IBM Plex Mono, вес 700 | машинопись: шапка, имена, иконка |
+| `IBMPlexMono-Medium.ttf` | IBM Plex Mono, вес 500 | машинопись: текст |

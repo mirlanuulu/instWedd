@@ -1,6 +1,15 @@
 [
   {
     "date": "2026-10-01",
+    "macrostructure": "bespoke: телеграфный бланк, текст на наклеенных лентах, почтовый штемпель",
+    "theme": "custom",
+    "theme_axes": "light / mono / warm",
+    "vibe": "телеграмма, машинка, штемпель, почтовые марки",
+    "enrichment": "CSS/SVG/JS: печать по буквам, удар штемпеля, марки с зубцами, фото в уголках, конфетти",
+    "brief": "Toi invitation · стиль «Машинопись» (/typewriter)"
+  },
+  {
+    "date": "2026-10-01",
     "macrostructure": "bespoke: швейцарский плакат, цифры даты на модульной сетке",
     "theme": "custom",
     "theme_axes": "light / grotesk-sans / cool",
