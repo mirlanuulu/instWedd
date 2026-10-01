@@ -2,6 +2,10 @@ export const LOCALES = ['ky', 'ru'] as const;
 export type Locale = (typeof LOCALES)[number];
 
 export const THEMES = ['romantic', 'national'] as const;
+
+/** Стороны тоя: кыз тарап — родня и гости невесты, бала тарап — жениха. */
+export const SIDES = ['kyz', 'bala'] as const;
+export type Side = (typeof SIDES)[number];
 export type ThemeName = (typeof THEMES)[number];
 
 /** Текст заказа на обоих языках. */
@@ -77,6 +81,17 @@ export interface Rsvp {
   telegramChatId: string;
   /** Верхняя граница поля «количество гостей». */
   maxGuests: number;
+  /**
+   * Один той для обеих сторон. ask: true — гость в ответе отмечает, чей он гость
+   * (кыз тарап или бала тарап), и сторона стоит первой строкой в сообщении паре.
+   * Если у стороны свой чат, её ответы приходят только туда.
+   * Каждая сторона может разослать свою ссылку: ?tarap=kyz или ?tarap=bala —
+   * тогда в форме сторона уже выбрана.
+   */
+  sides: {
+    ask: boolean;
+    telegramChatIds: Record<Side, string>;
+  };
 }
 
 export interface Studio {

@@ -146,6 +146,12 @@ export const invite: InviteConfig = {
     // Можно оставить пустым и задать TELEGRAM_CHAT_ID в переменных окружения.
     telegramChatId: '',
     maxGuests: 6,
+    // Гость отмечает, чей он гость. Отдельные чаты сторон — по желанию,
+    // пустые значит общий чат (или TELEGRAM_CHAT_ID_KYZ / TELEGRAM_CHAT_ID_BALA).
+    sides: {
+      ask: true,
+      telegramChatIds: { kyz: '', bala: '' },
+    },
   },
 
   studio: {

@@ -1,4 +1,5 @@
 import { invite } from '@/config/invite';
+import type { Side } from '@/config/types';
 import { dictionaries } from '@/locales';
 import type { RsvpPayload } from './rsvp';
 
@@ -19,11 +20,15 @@ export function formatRsvpMessage(rsvp: RsvpPayload): string {
   const t = dictionaries[locale];
   const [first, second] = invite.couple;
 
-  const lines = [
+  const lines: string[] = [];
+  // Сторона — первой строкой: по ней гостей рассаживают и считают отдельно.
+  if (rsvp.side) lines.push(`<b>${escapeHtml(t.telegram.sides[rsvp.side]).toUpperCase()}</b>`);
+  lines.push(
     `${rsvp.attending ? '✅' : '❌'} <b>${escapeHtml(rsvp.name)}</b> — ${rsvp.attending ? t.telegram.yes : t.telegram.no}`,
-  ];
+  );
   if (rsvp.attending) lines.push(`${t.telegram.guests}: ${rsvp.guests}`);
   if (rsvp.wish) lines.push(`${t.telegram.wish}: ${escapeHtml(rsvp.wish)}`);
+  if (rsvp.flowers) lines.push(`💐 ${t.telegram.bouquet(rsvp.flowers)}`);
 
   // Подпись с именами пары: один бот может обслуживать несколько приглашений.
   lines.push(
@@ -38,11 +43,17 @@ export interface TelegramTarget {
   chatId: string;
 }
 
-/** Куда отправлять. null, если бот не настроен. */
-export function telegramTarget(): TelegramTarget | null {
+/**
+ * Куда отправлять. null, если бот не настроен.
+ * У стороны может быть свой чат; если его нет — общий.
+ */
+export function telegramTarget(side: Side | null = null): TelegramTarget | null {
   const token = process.env.TELEGRAM_BOT_TOKEN?.trim();
   // Переменная окружения важнее конфига: так chat_id можно не хранить в репозитории.
-  const chatId = process.env.TELEGRAM_CHAT_ID?.trim() || invite.rsvp.telegramChatId.trim();
+  const sideChat = side
+    ? process.env[`TELEGRAM_CHAT_ID_${side.toUpperCase()}`]?.trim() || invite.rsvp.sides.telegramChatIds[side].trim()
+    : '';
+  const chatId = sideChat || process.env.TELEGRAM_CHAT_ID?.trim() || invite.rsvp.telegramChatId.trim();
   return token && chatId ? { token, chatId } : null;
 }
 

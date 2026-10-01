@@ -76,6 +76,8 @@ export interface Dictionary {
     sending: string;
     nameRequired: string;
     error: string;
+    /** Чей гость: кыз тарап или бала тарап. */
+    side: { question: string; kyz: string; bala: string; required: string };
     thanksYes: { title: string; text: string };
     thanksNo: { title: string; text: string };
   };
@@ -98,5 +100,9 @@ export interface Dictionary {
     guests: string;
     wish: string;
     language: string;
+    /** Сторона первой строкой сообщения. */
+    sides: { kyz: string; bala: string };
+    /** «Гүлдесте: 6 гүл» — сколько цветов гость собрал в букет. */
+    bouquet: (n: number) => string;
   };
 }

@@ -1,5 +1,5 @@
 import { invite } from '@/config/invite';
-import { LOCALES, type Locale } from '@/config/types';
+import { LOCALES, SIDES, type Locale, type Side } from '@/config/types';
 
 export const RSVP_LIMITS = {
   name: 80,
@@ -14,7 +14,14 @@ export interface RsvpPayload {
   wish: string;
   /** Язык, на котором гость заполнял форму. */
   locale: Locale;
+  /** Чей гость. null, если в заказе стороны не спрашиваются. */
+  side: Side | null;
+  /** Сколько цветов гость собрал в букет (версии с букетом). */
+  flowers?: number;
 }
+
+/** Больше цветов в букете ни в одной версии нет. */
+const MAX_FLOWERS = 12;
 
 /**
  * Проверка ответа гостя. Работает и в форме, и на сервере:
@@ -42,5 +49,18 @@ export function parseRsvp(input: unknown): RsvpPayload | null {
     guests = data.guests;
   }
 
-  return { name, attending: data.attending, guests, wish, locale };
+  let side: Side | null = null;
+  if (invite.rsvp.sides.ask) {
+    side = SIDES.find((code) => code === data.side) ?? null;
+    if (!side) return null;
+  }
+
+  let flowers: number | undefined;
+  if (data.flowers !== undefined) {
+    if (typeof data.flowers !== 'number' || !Number.isInteger(data.flowers)) return null;
+    if (data.flowers < 0 || data.flowers > MAX_FLOWERS) return null;
+    flowers = data.flowers;
+  }
+
+  return { name, attending: data.attending, guests, wish, locale, side, ...(flowers !== undefined && { flowers }) };
 }

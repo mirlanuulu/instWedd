@@ -40,7 +40,7 @@ export async function POST(request: Request) {
   const address = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
   if (!allowRequest(address)) return fail('rate_limited', 429);
 
-  const target = telegramTarget();
+  const target = telegramTarget(rsvp.side);
   if (!target) {
     console.error('[rsvp] Бот не настроен: нужен TELEGRAM_BOT_TOKEN и chat_id (TELEGRAM_CHAT_ID или rsvp.telegramChatId в конфиге).');
     return fail('not_configured', 503);

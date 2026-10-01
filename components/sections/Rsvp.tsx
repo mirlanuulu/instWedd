@@ -2,6 +2,7 @@
 
 import { useEffect, useId } from 'react';
 import { fireConfetti } from '@/lib/confetti';
+import { SIDES } from '@/config/types';
 import { RSVP_LIMITS } from '@/lib/rsvp';
 import { useRsvpForm } from '@/lib/useRsvpForm';
 import { useInvite } from '@/components/providers/InviteProvider';
@@ -32,8 +33,9 @@ export function Rsvp() {
   const invite = useInvite();
   const { t, locale } = useLocale();
   const ids = useId();
-  const form = useRsvpForm({ locale, maxGuests: invite.rsvp.maxGuests });
-  const { refs, name, attending, guests, wish, invalid, status, sending, maxGuests } = form;
+  const askSide = invite.rsvp.sides.ask;
+  const form = useRsvpForm({ locale, maxGuests: invite.rsvp.maxGuests, askSide });
+  const { refs, name, side, attending, guests, wish, invalid, status, sending, maxGuests } = form;
 
   // Конфетти только тем, кто придёт. После отправки формы уже нет, так что attending больше не меняется.
   useEffect(() => {
@@ -95,9 +97,36 @@ export function Rsvp() {
           )}
         </div>
 
+        {askSide && (
+          <fieldset aria-describedby={invalid.side ? `${ids}-side-error` : undefined}>
+            <legend className="text-sm text-ink-2">{t.rsvp.side.question}</legend>
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              {SIDES.map((option, i) => (
+                <label key={option} className={CHOICE}>
+                  <input
+                    ref={i === 0 ? refs.firstSide : undefined}
+                    type="radio"
+                    name={`${ids}-side`}
+                    checked={side === option}
+                    onChange={() => form.chooseSide(option)}
+                    className="absolute inset-0 cursor-pointer opacity-0"
+                  />
+                  {t.rsvp.side[option]}
+                </label>
+              ))}
+            </div>
+            {invalid.side && (
+              <p id={`${ids}-side-error`} className="mt-3 text-sm font-semibold text-accent">
+                {t.rsvp.side.required}
+              </p>
+            )}
+          </fieldset>
+        )}
+
         <fieldset aria-describedby={invalid.attending ? `${ids}-choice-error` : undefined}>
           <legend className="text-sm text-ink-2">{t.rsvp.attendance}</legend>
-          <div className="mt-3 grid grid-cols-2 gap-3">
+          {/* Варианты — полные фразы, поэтому друг под другом. */}
+          <div className="mt-3 grid grid-cols-1 gap-3">
             {[true, false].map((option) => (
               <label key={String(option)} className={CHOICE}>
                 {/* Радио остаётся в потоке внутри подписи: выбор не дёргает прокрутку. */}

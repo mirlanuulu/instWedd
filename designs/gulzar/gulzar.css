@@ -496,46 +496,6 @@
   min-width: 0;
 }
 
-.g-pick {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.75rem;
-  margin-top: 0.9rem;
-  padding: 0 1.2rem;
-  border: 1px solid var(--color-rose);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--color-rose);
-  font-family: var(--font-serif);
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  white-space: nowrap;
-  cursor: pointer;
-  transition:
-    background-color 160ms ease-out,
-    color 160ms ease-out,
-    border-color 160ms ease-out,
-    scale 160ms ease-out;
-}
-
-.g-pick:active {
-  scale: 0.96;
-}
-
-@media (hover: hover) {
-  .g-pick:hover {
-    background: oklch(52% 0.13 8 / 0.08);
-  }
-}
-
-.g-pick[aria-pressed='true'] {
-  border-color: transparent;
-  background: var(--color-rose-soft);
-  color: var(--color-ink-2);
-  cursor: default;
-}
-
 /* ---------- Таймер ---------- */
 
 .g-countdown {
@@ -666,108 +626,528 @@
   rotate: -14deg;
 }
 
-/* ---------- Полоска букета ---------- */
+/* ---------- Букет ---------- */
 
-.g-bar {
-  position: fixed;
-  left: 50%;
-  bottom: max(0.75rem, env(safe-area-inset-bottom));
-  z-index: 30;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  max-width: calc(100vw - 1rem);
-  padding: 0.3rem 0.4rem 0.3rem 0.95rem;
-  border: 1px solid oklch(72% 0.075 78 / 0.6);
-  border-radius: 999px;
-  background: oklch(98.9% 0.007 80 / 0.88);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 10px 28px -14px oklch(33% 0.05 15 / 0.45);
-  opacity: 0;
-  translate: -50% 1.25rem;
-  pointer-events: none;
-  transition:
-    opacity 500ms ease-out,
-    translate 500ms var(--ease-petal);
+/* Квадрат, в котором цветы лежат по раскладке из bouquet.ts. */
+.g-bouquet {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
 }
 
-.g-bar[data-shown] {
-  opacity: 1;
-  translate: -50% 0;
-  pointer-events: auto;
-}
-
-.g-bar-label {
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  line-height: 1.1;
-  white-space: nowrap;
-}
-
-.g-bar-name {
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-ink-2);
-}
-
-.g-bar-count {
-  font-size: 1rem;
-  font-weight: 600;
-  font-variant-numeric: lining-nums;
-  color: var(--color-rose);
-}
-
-.g-bar-slots {
-  display: flex;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.g-slot {
-  display: grid;
-  place-items: center;
-  width: clamp(2.3rem, 10.5vw, 2.75rem);
-  height: 2.75rem;
-  border-radius: 999px;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.g-slot img {
-  width: 88%;
+.g-bouquet-leaves {
+  position: absolute;
+  left: -14%;
+  top: 6%;
+  width: 128%;
   height: auto;
-  filter: grayscale(1) opacity(0.3);
-  transition: filter 400ms ease-out;
+  rotate: 180deg;
+  opacity: 0.9;
 }
 
-.g-slot[data-filled] img {
-  filter: none;
+.g-bouquet-flower {
+  position: absolute;
+  height: auto;
 }
 
+/* Новый цветок распускается: из бутона в полный размер. */
 @media (prefers-reduced-motion: no-preference) {
-  .g-slot[data-filled] img {
-    animation: g-pop 520ms var(--ease-petal);
+  .g-bouquet-flower {
+    animation: g-bloom 900ms var(--ease-petal) both;
+  }
+
+  .g-bouquet-leaves {
+    animation: g-fade 700ms ease-out both;
   }
 }
 
-@keyframes g-pop {
-  0% {
-    scale: 0.7;
+@keyframes g-bloom {
+  from {
+    opacity: 0;
+    scale: 0.35;
   }
-  55% {
-    scale: 1.18;
+  60% {
+    opacity: 1;
   }
-  100% {
+  to {
+    opacity: 1;
     scale: 1;
   }
 }
 
-/* На самых узких экранах — только счётчик, без слова. */
-@media (max-width: 359px) {
-  .g-bar-name {
-    display: none;
+@keyframes g-fade {
+  from {
+    opacity: 0;
   }
+}
+
+/* Маленький букет в углу. */
+.g-posy {
+  position: fixed;
+  right: max(0.75rem, env(safe-area-inset-right));
+  bottom: max(0.9rem, env(safe-area-inset-bottom));
+  z-index: 30;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+.g-posy-button {
+  position: relative;
+  display: block;
+  width: 4.75rem;
+  opacity: 0;
+  translate: 0 0.75rem;
+  filter: drop-shadow(0 6px 10px oklch(33% 0.05 15 / 0.25));
+  transition:
+    opacity 500ms ease-out,
+    translate 500ms var(--ease-petal);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.g-posy[data-shown] .g-posy-button {
+  opacity: 1;
+  translate: 0 0;
+  pointer-events: auto;
+}
+
+.g-posy-count {
+  position: absolute;
+  right: -0.2rem;
+  bottom: -0.35rem;
+  z-index: 10;
+  min-width: 2.1rem;
+  padding: 0.05rem 0.4rem;
+  border: 1px solid oklch(72% 0.075 78 / 0.7);
+  border-radius: 999px;
+  background: var(--color-card);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-variant-numeric: lining-nums;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--color-rose);
+}
+
+/* Подсказка рядом с букетом: появляется на пару секунд при новом цветке. */
+.g-posy-hint {
+  max-width: min(15rem, calc(100vw - 7.5rem));
+  margin: 0 0 0.6rem;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid oklch(72% 0.075 78 / 0.6);
+  border-radius: 1rem 1rem 0.25rem 1rem;
+  background: oklch(98.9% 0.007 80 / 0.94);
+  box-shadow: 0 8px 22px -12px oklch(33% 0.05 15 / 0.4);
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  color: var(--color-ink);
+  text-wrap: balance;
+  opacity: 0;
+  translate: 0.5rem 0;
+  transition:
+    opacity 400ms ease-out,
+    translate 400ms var(--ease-petal);
+}
+
+.g-posy-hint:empty {
+  display: none;
+}
+
+.g-posy-hint[data-shown] {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* ---------- Программа ---------- */
+
+.g-program {
+  margin: 2.2rem 0 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+.g-program-item {
+  display: grid;
+  grid-template-columns: 4.6rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: baseline;
+  padding: 1rem 0.25rem;
+}
+
+.g-program-item + .g-program-item {
+  border-top: 1px solid oklch(72% 0.075 78 / 0.55);
+}
+
+.g-program-time {
+  font-size: 1.6rem;
+  font-weight: 500;
+  font-variant-numeric: lining-nums tabular-nums;
+  line-height: 1;
+  color: var(--color-rose);
+}
+
+.g-program-what {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.g-program-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--color-ink);
+}
+
+.g-program-note {
+  font-size: 1.0625rem;
+  color: var(--color-ink-2);
+}
+
+/* ---------- Место ---------- */
+
+.g-venue {
+  margin: 2.2rem 0 0;
+}
+
+.g-venue-photo {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  outline: 1px solid var(--color-gold);
+  outline-offset: 0.45rem;
+  box-shadow: 0 18px 36px -24px oklch(33% 0.05 15 / 0.5);
+}
+
+.g-venue-photo img {
+  object-fit: cover;
+}
+
+.g-venue-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-top: 1.6rem;
+}
+
+.g-venue-name {
+  font-family: var(--font-script);
+  font-size: 2.2rem;
+  line-height: 1.15;
+  color: var(--color-rose-2);
+}
+
+.g-venue-address {
+  font-size: 1.125rem;
+  color: var(--color-ink-2);
+}
+
+.g-venue-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.4rem;
+}
+
+.g-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.9rem;
+  padding: 0 1.3rem;
+  border: 1px solid var(--color-rose);
+  border-radius: 999px;
+  background: var(--color-rose);
+  color: var(--color-on-rose);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color 160ms ease-out,
+    scale 160ms ease-out;
+}
+
+.g-button:active {
+  scale: 0.96;
+}
+
+.g-button-quiet {
+  background: transparent;
+  color: var(--color-rose);
+}
+
+@media (hover: hover) {
+  .g-button:hover {
+    background: var(--color-rose-2);
+    color: var(--color-on-rose);
+  }
+}
+
+/* ---------- Дресс-код: ленты ---------- */
+
+.g-dress-note {
+  max-width: 30ch;
+  margin: 1.6rem auto 0;
+  font-size: 1.1875rem;
+  color: var(--color-ink-2);
+  text-wrap: balance;
+}
+
+.g-ribbons {
+  display: flex;
+  justify-content: center;
+  gap: clamp(0.75rem, 4vw, 1.4rem);
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.g-ribbon-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+/* Лента с вырезом на конце; лёгкий блик — как у атласа. */
+.g-ribbon {
+  display: block;
+  width: clamp(2.6rem, 13vw, 3.4rem);
+  height: 7.5rem;
+  background:
+    linear-gradient(90deg, oklch(100% 0 0 / 0) 30%, oklch(100% 0 0 / 0.28) 48%, oklch(100% 0 0 / 0) 66%),
+    var(--ribbon);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 86%, 0 100%);
+  box-shadow: inset 0 0 0 1px oklch(33% 0.05 15 / 0.08);
+}
+
+.g-ribbon-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-ink-2);
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Финал: букет и ответ ---------- */
+
+.g-finale,
+.g-thanks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1.8rem;
+  outline: none;
+}
+
+.g-finale-bouquet {
+  width: min(64vw, 17rem);
+}
+
+.g-finale-title {
+  margin: 1.6rem 0 0;
+  font-family: var(--font-script);
+  font-size: 2.2rem;
+  line-height: 1.15;
+  color: var(--color-rose-2);
+}
+
+.g-finale-text {
+  max-width: 26ch;
+  margin: 0.3rem 0 0;
+  font-size: 1.125rem;
+  color: var(--color-ink-2);
+  text-wrap: balance;
+}
+
+.g-thanks-title {
+  margin: 1.2rem 0 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.g-thanks-text {
+  max-width: 28ch;
+  margin: 0.4rem 0 0;
+  font-size: 1.125rem;
+  color: var(--color-ink-2);
+}
+
+.g-form {
+  display: grid;
+  gap: 1.8rem;
+  margin-top: 2.4rem;
+  padding: 1.8rem 1.25rem 1.5rem;
+  background-color: var(--color-card);
+  background-image: url('/gulzar/paper.webp');
+  background-size: 600px 600px;
+  box-shadow:
+    0 1px 0 oklch(100% 0 0 / 0.7) inset,
+    0 18px 40px -24px oklch(33% 0.05 15 / 0.45);
+  text-align: left;
+}
+
+.g-field {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.g-label {
+  display: block;
+  padding: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-ink-2);
+}
+
+.g-input {
+  width: 100%;
+  margin-top: 0.3rem;
+  padding: 0.5rem 0;
+  border: 0;
+  border-bottom: 1px solid oklch(46% 0.04 18 / 0.6);
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+  font-size: 1.1875rem;
+  outline: none;
+  transition: border-color 160ms ease-out;
+}
+
+.g-input::placeholder {
+  color: oklch(46% 0.04 18 / 0.6);
+}
+
+.g-input:focus {
+  border-bottom-color: var(--color-rose);
+  box-shadow: 0 1px 0 0 var(--color-rose);
+}
+
+.g-input[aria-invalid="true"] {
+  border-bottom-color: var(--color-rose);
+}
+
+.g-textarea {
+  resize: none;
+}
+
+.g-error {
+  margin: 0.45rem 0 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-rose);
+}
+
+.g-error:empty {
+  display: none;
+}
+
+.g-choices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+}
+
+.g-choice {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0 0.6rem;
+  border: 1px solid oklch(46% 0.04 18 / 0.5);
+  border-radius: 999px;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease-out,
+    border-color 160ms ease-out,
+    color 160ms ease-out;
+}
+
+/* Радио на всю «таблетку»: в потоке, поэтому выбор не дёргает прокрутку. */
+.g-choice input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.g-choice:has(input:checked) {
+  border-color: var(--color-rose);
+  background: var(--color-rose);
+  color: var(--color-on-rose);
+}
+
+.g-choice:has(input:focus-visible) {
+  outline: 2px solid var(--color-rose);
+  outline-offset: 3px;
+}
+
+.g-guests {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.g-stepper {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.g-stepper button {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid oklch(46% 0.04 18 / 0.5);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-ink);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.g-stepper button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.g-stepper output {
+  min-width: 1.6rem;
+  font-size: 1.6rem;
+  font-weight: 500;
+  font-variant-numeric: lining-nums tabular-nums;
+  text-align: center;
+}
+
+.g-submit {
+  text-align: center;
+}
+
+.g-open-still::after {
+  display: none;
+}
+
+.g-open:disabled {
+  opacity: 0.7;
+  cursor: wait;
 }

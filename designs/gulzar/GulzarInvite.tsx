@@ -1,17 +1,21 @@
 'use client';
 
 import { IntroProvider } from '@/components/providers/IntroProvider';
-import { BouquetBar } from './BouquetBar';
 import { BouquetProvider } from './BouquetProvider';
+import { CornerBouquet } from './CornerBouquet';
 import { Countdown } from './Countdown';
+import { DressCode } from './DressCode';
 import { GardenGate } from './GardenGate';
 import { Hero } from './Hero';
 import { LanguageToggle } from './LanguageToggle';
+import { Program } from './Program';
+import { Rsvp } from './Rsvp';
 import { Story } from './Story';
+import { Venue } from './Venue';
 
 /**
  * «Гүлзар»: ворота из цветов, за ними — сад. Каждый раздел дарит гостю
- * цветок, к ответу на приглашение он подходит с собранным букетом.
+ * цветок, букет сам собирается в углу, а в конце уходит паре вместе с ответом.
  */
 export function GulzarInvite() {
   return (
@@ -27,8 +31,12 @@ export function GulzarInvite() {
           <Hero />
           <Countdown />
           <Story />
+          <Program />
+          <Venue />
+          <DressCode />
+          <Rsvp />
         </main>
-        <BouquetBar />
+        <CornerBouquet />
       </BouquetProvider>
     </IntroProvider>
   );

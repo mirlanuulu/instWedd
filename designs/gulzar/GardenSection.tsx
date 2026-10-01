@@ -8,29 +8,40 @@ import { useBouquet } from './BouquetProvider';
 import { FLOWERS } from './flowers';
 import { GULZAR_TEXTS } from './texts';
 
+/** Раздел считается «пройденным», когда его верх поднялся выше этой доли экрана. */
+const REACHED = 0.4;
+
 /**
- * Раздел-«клумба»: свой цветок, номер цветка, заголовок и кнопка
- * «в букет». Если гость прокрутил раздел, не нажав, цветок сам ложится в букет.
+ * Раздел-«клумба»: свой цветок и заголовок. Когда гость доходит до раздела,
+ * цветок сам ложится в букет в углу экрана — без кнопок и лишних действий.
  */
-export function GardenSection({ id, children }: { id: BouquetId; children: ReactNode }) {
+export function GardenSection({
+  id,
+  children,
+  className = '',
+}: {
+  id: BouquetId;
+  children: ReactNode;
+  className?: string;
+}) {
   const { locale, t } = useLocale();
   const g = GULZAR_TEXTS[locale];
-  const { picked, pick } = useBouquet();
+  const { picked, add } = useBouquet();
   const root = useRef<HTMLElement>(null);
-  const flowerRef = useRef<HTMLImageElement>(null);
   const index = bouquetIndex(id);
   const item = BOUQUET[index]!;
   const flower = FLOWERS[item.flower];
   const inBouquet = picked.has(id);
 
-  // Раздел целиком ушёл за верх экрана — значит, прочитан. Проверка по прокрутке,
-  // а не IntersectionObserver: при прыжке по ссылке раздел не «пересекает» край экрана.
+  // Проверка по прокрутке, а не IntersectionObserver: при прыжке по ссылке
+  // раздел не «пересекает» край экрана, а цветок всё равно должен лечь в букет.
   useEffect(() => {
     if (inBouquet) return;
     let frame = 0;
     const check = () => {
       frame = 0;
-      if ((root.current?.getBoundingClientRect().bottom ?? 1) < 0) pick(id);
+      const top = root.current?.getBoundingClientRect().top;
+      if (top !== undefined && top < window.innerHeight * REACHED) add(id);
     };
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(check);
@@ -41,32 +52,16 @@ export function GardenSection({ id, children }: { id: BouquetId; children: React
       window.removeEventListener('scroll', onScroll);
       cancelAnimationFrame(frame);
     };
-  }, [id, pick, inBouquet]);
+  }, [id, add, inBouquet]);
 
   return (
-    <section id={id} ref={root} className="g-section" aria-labelledby={`${id}-title`}>
+    <section id={id} ref={root} className={`g-section ${className}`} aria-labelledby={`${id}-title`}>
       <div className="g-section-head">
-        <Image
-          ref={flowerRef}
-          src={flower.src}
-          width={flower.w}
-          height={flower.h}
-          alt=""
-          sizes="160px"
-          className="g-section-flower"
-        />
-        <p className="g-eyebrow">{g.flowerNo(index + 1, BOUQUET.length)}</p>
+        <Image src={flower.src} width={flower.w} height={flower.h} alt="" sizes="136px" className="g-section-flower" />
+        <p className="g-eyebrow">{g.flowerNo(index + 1)}</p>
         <h2 id={`${id}-title`} className="g-section-title">
           {item.title(t)}
         </h2>
-        <button
-          type="button"
-          className="g-pick"
-          aria-pressed={inBouquet}
-          onClick={() => pick(id, flowerRef.current)}
-        >
-          {inBouquet ? `✓ ${g.picked}` : g.pick}
-        </button>
       </div>
       {children}
     </section>
