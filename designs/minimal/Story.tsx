@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useInvite } from '@/components/providers/InviteProvider';
 import { useLocale } from '@/components/providers/LocaleProvider';
+import { delay } from '@/designs/shared/reveal';
 import { Section, Sheet } from './Sheet';
 
 /**
@@ -26,7 +27,7 @@ export function Story() {
         {story.map((item, index) => (
           <li key={item.photo.src}>
             <figure>
-              <div className="relative aspect-[3/4] overflow-hidden bg-paper-2">
+              <div data-reveal="curtain" style={delay(index * 120)} className="relative aspect-[3/4] overflow-hidden bg-paper-2">
                 <Image
                   src={item.photo.src}
                   alt={pick(item.photo.alt)}
@@ -35,7 +36,7 @@ export function Story() {
                   className="object-cover"
                 />
               </div>
-              <figcaption className="mt-4 pr-4">
+              <figcaption data-reveal="up" style={delay(index * 120 + 250)} className="mt-4 pr-4">
                 <span className="figures label text-muted">{String(index + 1).padStart(2, '0')}</span>
                 <h3 className="mt-2 text-md">{pick(item.title)}</h3>
                 <p className="mt-1 text-ink-2">{pick(item.text)}</p>

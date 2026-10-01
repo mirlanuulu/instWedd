@@ -11,8 +11,10 @@
  * этой страницы попали бы утилиты классики и остальных стилей.
  */
 @import 'tailwindcss' source(none);
+@import '../shared/reveal.css';
 
 @source './';
+@source '../shared';
 @source '../../app/minimal';
 
 @theme static {
@@ -27,6 +29,9 @@
   --color-rule: oklch(86% 0.006 80);
   /* Ошибки формы. Цвет здесь не единственный признак: рядом всегда текст. */
   --color-signal: oklch(48% 0.13 30);
+  /* Шампань — только для салюта: на картоне он выглядит как блёстки, а не как конфетти из пачки. */
+  --color-gold: oklch(82% 0.07 80);
+  --color-gold-2: oklch(91% 0.04 85);
 
   --font-*: initial;
   --font-display: var(--font-literata), ui-serif, Georgia, serif;

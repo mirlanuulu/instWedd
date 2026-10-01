@@ -19,6 +19,7 @@ interface SectionProps {
 /**
  * Рубрика номера: толстая линейка во всю колонку и заголовок под ней.
  * Линейки, а не пустоты, отделяют материалы друг от друга — как в журнале.
+ * При появлении по заголовку пробегает красная шторка.
  */
 export function Section({ labelledBy, title, className = 'pt-16 pb-4', children }: SectionProps) {
   return (
@@ -26,7 +27,7 @@ export function Section({ labelledBy, title, className = 'pt-16 pb-4', children 
       <Page>
         <div className="border-t-[3px] border-ink pt-4">
           <h2 id={labelledBy} className="text-xl">
-            {title}
+            <span data-reveal="bar">{title}</span>
           </h2>
         </div>
         {children}

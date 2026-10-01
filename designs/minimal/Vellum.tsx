@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { fireConfetti } from '@/lib/confetti';
 import { useIntro } from '@/components/providers/IntroProvider';
 import { useLocale } from '@/components/providers/LocaleProvider';
 import { useMusic } from '@/components/providers/MusicProvider';
@@ -9,8 +10,8 @@ import { useMusic } from '@/components/providers/MusicProvider';
 const LIFT = { duration: 900, easing: 'cubic-bezier(0.65, 0, 0.35, 1)' };
 
 /**
- * Калька поверх первого экрана. Тап по ней запускает музыку и снимает лист:
- * он уходит вверх, а имена под ним становятся резкими.
+ * Калька поверх первого экрана. Тап по ней запускает музыку и салют и снимает лист:
+ * он уходит вверх, а буквы имён под ним вылетают по одной.
  */
 export function Vellum() {
   const { t } = useLocale();
@@ -30,6 +31,7 @@ export function Vellum() {
     setPhase('opening');
     // Музыка стартует синхронно, внутри обработчика тапа: иначе браузер заблокирует звук.
     startMusic();
+    fireConfetti(element);
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const lift = reduced

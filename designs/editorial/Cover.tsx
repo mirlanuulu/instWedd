@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { fireConfetti } from '@/lib/confetti';
 import { formatEventDate } from '@/lib/invite';
 import { useIntro } from '@/components/providers/IntroProvider';
 import { useInvite } from '@/components/providers/InviteProvider';
@@ -15,7 +16,7 @@ const chars = (text: string) => Array.from(text).length;
 /**
  * Обложка номера поверх приглашения. Шапка — название события во всю ширину,
  * имена — крупной дидоной, ниже анонсы: когда и где. Тап перелистывает обложку
- * и запускает музыку.
+ * и запускает музыку и салют.
  */
 export function Cover() {
   const invite = useInvite();
@@ -36,6 +37,7 @@ export function Cover() {
     setPhase('opening');
     // Музыка стартует синхронно, внутри обработчика тапа: иначе браузер заблокирует звук.
     startMusic();
+    fireConfetti(element);
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const turn = reduced

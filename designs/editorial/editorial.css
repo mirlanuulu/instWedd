@@ -8,6 +8,7 @@
 
 /* Tailwind сканирует только файлы эдиториала и общую папку стилей. */
 @import 'tailwindcss' source(none);
+@import '../shared/reveal.css';
 
 @source './';
 @source '../shared';
@@ -26,6 +27,9 @@
   /* Журнальный красный: шапка, буквица, кнопка ответа. Не заливкой секций. */
   --color-accent: oklch(50% 0.18 27);
   --color-accent-ink: oklch(95.8% 0.014 88);
+  /* Золото — только для салюта: красный с золотом, как праздничный номер. */
+  --color-gold: oklch(80% 0.12 85);
+  --color-gold-2: oklch(90% 0.08 92);
 
   --font-*: initial;
   --font-display: var(--font-playfair), ui-serif, Georgia, serif;

@@ -21,7 +21,8 @@ export function useReveal(root: RefObject<HTMLElement | null>, active: boolean) 
           observer.unobserve(entry.target);
         }
       },
-      { rootMargin: '0px 0px -10% 0px' },
+      // Срабатывает, едва элемент показался: иначе текст у нижнего края первого экрана ждал бы прокрутки.
+      { threshold: 0.01 },
     );
 
     // Элементы, появившиеся позже (благодарность после RSVP, цифры таймера), ловит MutationObserver.

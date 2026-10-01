@@ -2,6 +2,7 @@
 
 import { useInvite } from '@/components/providers/InviteProvider';
 import { useLocale } from '@/components/providers/LocaleProvider';
+import { delay } from '@/designs/shared/reveal';
 import { Heading, Section, Sheet } from './Sheet';
 
 /** Программа — таблица в две колонки: время и что происходит. Строки делят волосяные линии. */
@@ -18,6 +19,8 @@ export function Program() {
           {program.map((item, index) => (
             <li
               key={`${item.time}-${index}`}
+              data-reveal="slide"
+              style={delay(index * 90)}
               className="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-x-4 border-b border-rule py-5"
             >
               <time className="figures font-medium">{item.time}</time>

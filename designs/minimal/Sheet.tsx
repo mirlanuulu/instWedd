@@ -24,11 +24,13 @@ export function Section({ labelledBy, className = 'py-20', children }: SectionPr
   );
 }
 
-/** Заголовок секции: тонкая антиква, по левому краю, без надстрочных меток. */
+/** Заголовок секции: тонкая антиква, по левому краю. При появлении выезжает снизу из-под кромки. */
 export function Heading({ id, children }: { id: string; children: ReactNode }) {
   return (
     <h2 id={id} className="text-xl">
-      {children}
+      <span data-reveal="mask">
+        <span>{children}</span>
+      </span>
     </h2>
   );
 }

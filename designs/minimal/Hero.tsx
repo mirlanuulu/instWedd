@@ -5,6 +5,7 @@ import { formatEventDate } from '@/lib/invite';
 import { useIntro } from '@/components/providers/IntroProvider';
 import { useInvite } from '@/components/providers/InviteProvider';
 import { useLocale } from '@/components/providers/LocaleProvider';
+import { delay, Letters } from '@/designs/shared/reveal';
 import { Sheet } from './Sheet';
 
 /**
@@ -37,12 +38,16 @@ export function Hero() {
           className="my-auto py-12 text-[length:min(var(--text-display),100cqi/(var(--name-chars)*0.62))] leading-none font-extralight tracking-[-0.02em]"
           style={{ '--name-chars': nameChars } as CSSProperties}
         >
-          <span className="block">{firstName}</span>{' '}
-          <span className="label my-5 block font-body text-muted">{t.hero.and}</span>{' '}
-          <span className="block text-right">{secondName}</span>
+          <span className="block">
+            <Letters text={firstName} start={250} />
+          </span>{' '}
+          <span data-reveal="up" style={delay(600)} className="label my-5 block font-body text-muted">{t.hero.and}</span>{' '}
+          <span className="block text-right">
+            <Letters text={secondName} start={700} />
+          </span>
         </h1>
 
-        <div className="grid grid-cols-[auto_minmax(0,1fr)] items-end gap-x-6 border-t border-rule pt-5">
+        <div data-reveal="up" style={delay(1000)} className="grid grid-cols-[auto_minmax(0,1fr)] items-end gap-x-6 border-t border-rule pt-5">
           <p className="figures font-display text-xl font-light">
             <time dateTime={`${invite.event.date}T${invite.event.time}${invite.event.utcOffset}`}>{date.numeric}</time>
           </p>
@@ -53,7 +58,7 @@ export function Hero() {
           </p>
         </div>
 
-        <p className="mt-6 max-w-[45ch] text-ink-2">{pick(invite.event.invitation)}</p>
+        <p data-reveal="up" style={delay(1150)} className="mt-6 max-w-[45ch] text-ink-2">{pick(invite.event.invitation)}</p>
       </Sheet>
     </section>
   );

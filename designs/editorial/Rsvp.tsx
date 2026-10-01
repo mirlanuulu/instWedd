@@ -1,6 +1,7 @@
 'use client';
 
-import { useId } from 'react';
+import { useEffect, useId } from 'react';
+import { fireConfetti } from '@/lib/confetti';
 import { RSVP_LIMITS } from '@/lib/rsvp';
 import { useRsvpForm } from '@/lib/useRsvpForm';
 import { useInvite } from '@/components/providers/InviteProvider';
@@ -37,7 +38,12 @@ export function Rsvp() {
   const form = useRsvpForm({ locale, maxGuests: rsvp.maxGuests });
   const { refs, name, attending, guests, wish, invalid, status, sending, maxGuests } = form;
 
-  // Ответ принят: вместо формы — заголовок и строка текста, без салюта.
+  // Тем, кто придёт, — салют красным и золотом.
+  useEffect(() => {
+    if (status === 'sent' && attending && refs.thanks.current) fireConfetti(refs.thanks.current);
+  }, [status, attending, refs.thanks]);
+
+  // Ответ принят: вместо формы — заголовок и строка текста.
   if (status === 'sent') {
     const thanks = attending ? t.rsvp.thanksYes : t.rsvp.thanksNo;
     return (

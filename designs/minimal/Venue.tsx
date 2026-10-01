@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { mapLinks } from '@/lib/invite';
 import { useInvite } from '@/components/providers/InviteProvider';
 import { useLocale } from '@/components/providers/LocaleProvider';
+import { delay } from '@/designs/shared/reveal';
 import { Heading, Section, Sheet } from './Sheet';
 
 const MAP_LINK =
@@ -28,7 +29,7 @@ export function Venue() {
       <Sheet>
         <Heading id="venue-title">{t.venue.title}</Heading>
 
-        <div className="relative mt-8 aspect-[3/2] overflow-hidden bg-paper-2">
+        <div data-reveal="curtain" className="relative mt-8 aspect-[3/2] overflow-hidden bg-paper-2">
           <Image
             src={venue.photo.src}
             alt={pick(venue.photo.alt)}
@@ -43,7 +44,7 @@ export function Venue() {
           {pick(venue.city)}, {pick(venue.address)}
         </address>
 
-        <div className="mt-6 grid gap-3 min-[23rem]:grid-cols-2">
+        <div data-reveal="up" style={delay(200)} className="mt-6 grid gap-3 min-[23rem]:grid-cols-2">
           {maps.map((map) => (
             <a key={map.name} href={map.href} target="_blank" rel="noopener noreferrer" aria-label={map.label} className={MAP_LINK}>
               {map.name}

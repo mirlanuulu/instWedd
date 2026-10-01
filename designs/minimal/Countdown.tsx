@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { twoDigits, useCountdown } from '@/lib/useCountdown';
 import { useInvite } from '@/components/providers/InviteProvider';
 import { useLocale } from '@/components/providers/LocaleProvider';
+import { RollNumber } from '@/designs/shared/reveal';
 import { Heading, Section, Sheet } from './Sheet';
 
 /**
@@ -38,13 +39,17 @@ export function Countdown() {
               {/* В разметке подпись идёт раньше числа, как требует dl; на экране — под числом или справа от него. */}
               <div className="row-span-3 flex flex-col-reverse self-stretch justify-start">
                 <dt className="label mt-3 text-muted">{t.countdown.days(left?.days ?? 0)}</dt>
-                <dd className="figures font-display text-display font-extralight">{left ? left.days : '—'}</dd>
+                <dd className="figures font-display text-display font-extralight">
+                  <RollNumber value={left ? String(left.days) : '—'} />
+                </dd>
               </div>
 
               {rest.map((unit) => (
                 <div key={unit.key} className="flex flex-row-reverse items-baseline justify-end gap-2 py-1">
                   <dt className="w-16 text-muted">{unit.label}</dt>
-                  <dd className="figures w-6 text-right font-medium">{unit.value}</dd>
+                  <dd className="figures w-6 text-right font-medium">
+                    <RollNumber value={unit.value} />
+                  </dd>
                 </div>
               ))}
             </dl>

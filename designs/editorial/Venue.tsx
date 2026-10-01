@@ -25,7 +25,7 @@ export function Venue() {
   return (
     <Section labelledBy="venue-title" title={t.venue.title}>
       <figure className="mt-6">
-        <div className="relative aspect-[3/2] overflow-hidden bg-paper-2">
+        <div data-reveal="curtain" className="relative aspect-[3/2] overflow-hidden bg-paper-2">
           <Image
             src={venue.photo.src}
             // Описание снимка — в подписи под ним, alt его не повторяет.

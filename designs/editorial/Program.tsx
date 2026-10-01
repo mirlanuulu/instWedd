@@ -2,6 +2,7 @@
 
 import { useInvite } from '@/components/providers/InviteProvider';
 import { useLocale } from '@/components/providers/LocaleProvider';
+import { delay } from '@/designs/shared/reveal';
 import { Section } from './Page';
 
 /** Программа — как оглавление номера: название, отточия, время. Пометки курсивом. */
@@ -13,7 +14,12 @@ export function Program() {
     <Section labelledBy="program-title" title={t.program.title}>
       <ol className="mt-6">
         {program.map((item, index) => (
-          <li key={`${item.time}-${index}`} className="border-b border-rule py-4 last:border-b-0">
+          <li
+            key={`${item.time}-${index}`}
+            data-reveal="slide"
+            style={delay(index * 90)}
+            className="border-b border-rule py-4 last:border-b-0"
+          >
             <div className="flex items-end">
               <h3 className="min-w-0 font-body text-base font-semibold tracking-normal">{pick(item.title)}</h3>
               <span aria-hidden="true" className="leader" />

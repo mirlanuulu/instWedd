@@ -3,6 +3,7 @@
 import type { CSSProperties } from 'react';
 import { useInvite } from '@/components/providers/InviteProvider';
 import { useLocale } from '@/components/providers/LocaleProvider';
+import { delay } from '@/designs/shared/reveal';
 import { Heading, Section, Sheet } from './Sheet';
 
 /** Больше четырёх цветов — вторая строка: в узкой колонке подписи иначе не встанут. */
@@ -23,7 +24,7 @@ export function DressCode() {
           className="mt-8 grid grid-cols-[repeat(var(--columns),minmax(0,1fr))] gap-y-6"
           style={{ '--columns': columns } as CSSProperties}
         >
-          {dressCode.colors.map((color) => (
+          {dressCode.colors.map((color, index) => (
             <li key={color.value}>
               {/*
                 Цвет — данные заказа, а не токен стиля, поэтому inline-стиль.
@@ -31,8 +32,9 @@ export function DressCode() {
               */}
               <span
                 aria-hidden="true"
+                data-reveal="pop"
                 className="block h-24 shadow-[0_0_0_0.5px_var(--color-rule)]"
-                style={{ backgroundColor: color.value }}
+                style={{ ...delay(index * 110), backgroundColor: color.value }}
               />
               <span className="mt-3 block pr-2 text-label text-ink-2">
                 {pick(color.name)}
