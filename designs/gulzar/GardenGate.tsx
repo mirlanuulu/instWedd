@@ -93,7 +93,7 @@ export function GardenGate() {
         },
         0.2,
       )
-      .to('[data-butterfly]', { x: () => gsap.utils.random(-160, 160), y: -420, autoAlpha: 0, duration: 1.6, ease: 'power2.in' }, 0.2)
+      .to('[data-butterfly]', { autoAlpha: 0, duration: 0.6, ease: 'power1.out' }, 0.2)
       // Бумага ворот тает, под ней — первый экран.
       .to('.g-gate-paper', { autoAlpha: 0, duration: 0.8, ease: 'power1.inOut' }, 0.45);
   });
@@ -133,8 +133,8 @@ export function GardenGate() {
         <Leaf side="left" front />
         <Leaf side="right" front />
 
-        <Butterfly kind="blue" x={46} y={11} w={2.8} r={14} wander={8} />
-        <Butterfly kind="amber" x={80} y={64} w={3} r={-18} wander={10} delay={3} />
+        <Butterfly kind="blue" x={20} y={5} w={2.6} r={-12} />
+        <Butterfly kind="amber" x={52} y={80} w={2.8} r={14} />
       </div>
     </div>
   );

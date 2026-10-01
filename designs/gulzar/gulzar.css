@@ -119,7 +119,10 @@
   }
 }
 
-/* ---------- Бабочки ---------- */
+/* ---------- Бабочки ----------
+ * Сидят на цветах неподвижно, как на гравюрах Редуте: плоская картинка,
+ * которую заставляют махать крыльями, выглядит неживой.
+ */
 
 .g-butterfly {
   position: absolute;
@@ -130,51 +133,10 @@
   rotate: var(--r, 0deg);
 }
 
-/* Взмах крыльев: картинка сжимается по горизонтали к своей оси. */
 .g-butterfly img {
   display: block;
   width: 100%;
   height: auto;
-  transform-origin: 50% 50%;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .g-butterfly img {
-    animation: g-flap var(--flap, 0.32s) ease-in-out infinite alternate;
-  }
-
-  .g-butterfly {
-    animation: g-wander var(--wander, 9s) ease-in-out var(--wander-delay, 0s) infinite;
-  }
-}
-
-@keyframes g-flap {
-  from {
-    scale: 1 1;
-  }
-  to {
-    scale: 0.28 0.96;
-  }
-}
-
-/* Порхание вокруг точки посадки. */
-@keyframes g-wander {
-  0%,
-  100% {
-    translate: 0 0;
-  }
-  22% {
-    translate: 1.6rem -1.2rem;
-  }
-  45% {
-    translate: 0.4rem -2.4rem;
-  }
-  68% {
-    translate: -1.4rem -1rem;
-  }
-  85% {
-    translate: -0.6rem 0.4rem;
-  }
 }
 
 /* ---------- Ворота сада (интро) ---------- */
@@ -487,4 +449,325 @@
 .g-lang button[aria-pressed='true'] {
   background: var(--color-rose);
   color: var(--color-on-rose);
+}
+
+/* ---------- Разделы-«клумбы» ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Место под полоску букета внизу экрана. */
+.g-main {
+  padding-bottom: calc(6rem + env(safe-area-inset-bottom));
+}
+
+.g-section {
+  max-width: 34rem;
+  margin-inline: auto;
+  padding: 4.5rem 1.25rem 1.5rem;
+  scroll-margin-top: 0.5rem;
+  text-align: center;
+}
+
+.g-section-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.g-section-flower {
+  width: 8.5rem;
+  height: auto;
+  margin-bottom: 0.5rem;
+  pointer-events: none;
+}
+
+.g-section-title {
+  margin: 0.25rem 0 0;
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-size: clamp(2.6rem, 11vw, 3.4rem);
+  line-height: 1.1;
+  color: var(--color-ink);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.g-pick {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  margin-top: 0.9rem;
+  padding: 0 1.2rem;
+  border: 1px solid var(--color-rose);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-rose);
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease-out,
+    color 160ms ease-out,
+    border-color 160ms ease-out,
+    scale 160ms ease-out;
+}
+
+.g-pick:active {
+  scale: 0.96;
+}
+
+@media (hover: hover) {
+  .g-pick:hover {
+    background: oklch(52% 0.13 8 / 0.08);
+  }
+}
+
+.g-pick[aria-pressed='true'] {
+  border-color: transparent;
+  background: var(--color-rose-soft);
+  color: var(--color-ink-2);
+  cursor: default;
+}
+
+/* ---------- Таймер ---------- */
+
+.g-countdown {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 2.2rem;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.g-countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-block: 0.3rem;
+}
+
+.g-countdown-unit + .g-countdown-unit {
+  border-left: 1px solid oklch(72% 0.075 78 / 0.7);
+}
+
+.g-countdown-value {
+  font-size: clamp(2.2rem, 10vw, 3rem);
+  font-weight: 500;
+  line-height: 1.1;
+  color: var(--color-ink);
+}
+
+.g-countdown-label {
+  margin-top: 0.2rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-ink-2);
+}
+
+.g-countdown-started {
+  grid-column: 1 / -1;
+  font-family: var(--font-script);
+  font-size: 2.6rem;
+  color: var(--color-rose);
+}
+
+/* ---------- История: листы гербария ---------- */
+
+.g-herbarium {
+  display: grid;
+  gap: 3.2rem;
+  margin: 2.6rem 0 0;
+  padding: 0 0.4rem;
+  list-style: none;
+}
+
+.g-sheet {
+  position: relative;
+  padding: 0.9rem 0.9rem 1.6rem;
+  background-color: var(--color-card);
+  background-image: url('/gulzar/paper.webp');
+  background-size: 600px 600px;
+  box-shadow:
+    0 1px 0 oklch(100% 0 0 / 0.7) inset,
+    0 14px 30px -18px oklch(33% 0.05 15 / 0.4),
+    0 2px 6px -3px oklch(33% 0.05 15 / 0.2);
+}
+
+.g-sheet-photo {
+  position: relative;
+  aspect-ratio: 4 / 3;
+}
+
+.g-sheet-photo img {
+  object-fit: cover;
+}
+
+/* Полоски бумажного скотча по верхним углам фото. */
+.g-tape {
+  position: absolute;
+  top: -0.55rem;
+  width: 4.4rem;
+  height: 1.35rem;
+  background: oklch(94% 0.025 85 / 0.78);
+  box-shadow: 0 1px 2px oklch(33% 0.05 15 / 0.12);
+}
+
+.g-tape-left {
+  left: -1.3rem;
+  rotate: -34deg;
+}
+
+.g-tape-right {
+  right: -1.3rem;
+  rotate: 34deg;
+}
+
+.g-sheet-title {
+  margin: 1rem 0 0.25rem;
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-size: 2.2rem;
+  line-height: 1.15;
+  color: var(--color-rose-2);
+}
+
+.g-sheet-text {
+  max-width: 30ch;
+  margin: 0 auto;
+  font-size: 1.125rem;
+  color: var(--color-ink-2);
+  text-wrap: pretty;
+}
+
+/* Засушенный цветок у края листа. */
+.g-sheet-flower {
+  position: absolute;
+  bottom: -1.8rem;
+  width: 5.2rem;
+  height: auto;
+  pointer-events: none;
+}
+
+.g-sheet-flower-right {
+  right: -1rem;
+  rotate: 16deg;
+}
+
+.g-sheet-flower-left {
+  left: -1rem;
+  rotate: -14deg;
+}
+
+/* ---------- Полоска букета ---------- */
+
+.g-bar {
+  position: fixed;
+  left: 50%;
+  bottom: max(0.75rem, env(safe-area-inset-bottom));
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: calc(100vw - 1rem);
+  padding: 0.3rem 0.4rem 0.3rem 0.95rem;
+  border: 1px solid oklch(72% 0.075 78 / 0.6);
+  border-radius: 999px;
+  background: oklch(98.9% 0.007 80 / 0.88);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 28px -14px oklch(33% 0.05 15 / 0.45);
+  opacity: 0;
+  translate: -50% 1.25rem;
+  pointer-events: none;
+  transition:
+    opacity 500ms ease-out,
+    translate 500ms var(--ease-petal);
+}
+
+.g-bar[data-shown] {
+  opacity: 1;
+  translate: -50% 0;
+  pointer-events: auto;
+}
+
+.g-bar-label {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.g-bar-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ink-2);
+}
+
+.g-bar-count {
+  font-size: 1rem;
+  font-weight: 600;
+  font-variant-numeric: lining-nums;
+  color: var(--color-rose);
+}
+
+.g-bar-slots {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.g-slot {
+  display: grid;
+  place-items: center;
+  width: clamp(2.3rem, 10.5vw, 2.75rem);
+  height: 2.75rem;
+  border-radius: 999px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.g-slot img {
+  width: 88%;
+  height: auto;
+  filter: grayscale(1) opacity(0.3);
+  transition: filter 400ms ease-out;
+}
+
+.g-slot[data-filled] img {
+  filter: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .g-slot[data-filled] img {
+    animation: g-pop 520ms var(--ease-petal);
+  }
+}
+
+@keyframes g-pop {
+  0% {
+    scale: 0.7;
+  }
+  55% {
+    scale: 1.18;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+/* На самых узких экранах — только счётчик, без слова. */
+@media (max-width: 359px) {
+  .g-bar-name {
+    display: none;
+  }
 }

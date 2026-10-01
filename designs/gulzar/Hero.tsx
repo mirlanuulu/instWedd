@@ -46,17 +46,18 @@ export function Hero() {
       if (reduced) return;
       if (phase === 'sealed') {
         gsap.set('[data-hero-in]', { autoAlpha: 0, y: 24 });
-        gsap.set('.g-arch', { autoAlpha: 0, scale: 1.06 });
-        gsap.set('.g-arch-wrap [data-flower]', { autoAlpha: 0, scale: 0.6 });
+        gsap.set('.g-arch img', { autoAlpha: 0, filter: 'blur(10px) brightness(1.25) saturate(0.4)' });
+        gsap.set('.g-arch-wrap [data-flower], .g-arch-wrap [data-butterfly]', { autoAlpha: 0 });
         return;
       }
       if (phase === 'opening') {
         const tl = gsap.timeline({ delay: 0.45, defaults: { ease: 'power3.out' } });
-        tl.to('.g-arch', { autoAlpha: 1, scale: 1, duration: 1.4 })
+        // Фото проявляется, как снимок: из бледного и размытого в чёткое, не сдвигаясь.
+        tl.to('.g-arch img', { autoAlpha: 1, filter: 'blur(0px) brightness(1) saturate(1)', duration: 1.8, ease: 'power2.out' })
           .to(
-            '.g-arch-wrap [data-flower]',
-            { autoAlpha: 1, scale: 1, duration: 1.1, ease: 'back.out(1.6)', stagger: 0.12 },
-            0.35,
+            '.g-arch-wrap [data-flower], .g-arch-wrap [data-butterfly]',
+            { autoAlpha: 1, duration: 1.2, ease: 'power1.out', stagger: 0.15 },
+            0.5,
           )
           .to('[data-hero-in]', { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.12 }, 0.2);
       }
@@ -87,8 +88,8 @@ export function Hero() {
         {FRONT.map((f) => (
           <Flower key={f.name + f.x} {...f} sizes={sizesFor(f)} />
         ))}
-        <Butterfly kind="blue" x={-10} y={34} w={2.8} r={-16} wander={9} />
-        <Butterfly kind="amber" x={92} y={58} w={2.6} r={20} wander={11} delay={4} flap={0.36} />
+        <Butterfly kind="blue" x={78} y={2} w={2.4} r={18} />
+        <Butterfly kind="amber" x={-6} y={84} w={2.5} r={-20} />
       </div>
 
       <h1 className="g-names g-hero-names" data-hero-in>

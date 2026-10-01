@@ -29,6 +29,13 @@ export const FLOWERS = {
   gallica: asset('rose-gallica', 1200, 883),
   leaves: asset('leaves-wild', 1300, 1154),
   blossom: asset('blossom', 968, 707),
+  // Отдельные головки для букета (плотные).
+  headCentifolia: asset('head-centifolia', 591, 574),
+  headPink: asset('head-pink', 700, 635),
+  headChina: asset('head-china', 700, 600),
+  headWild: asset('head-wild', 651, 590),
+  headGallica: asset('head-gallica', 700, 517),
+  headBlossom: asset('head-blossom', 572, 479),
   butterflyBlue: asset('butterfly-blue', 133, 146),
   butterflyAmber: asset('butterfly-amber', 149, 161),
 } as const;

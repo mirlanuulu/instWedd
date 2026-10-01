@@ -64,37 +64,10 @@ export function Flower({
   );
 }
 
-export function Butterfly({
-  kind,
-  x,
-  y,
-  w,
-  r = 0,
-  flap = 0.3,
-  wander = 9,
-  delay = 0,
-}: {
-  kind: 'blue' | 'amber';
-  x: number;
-  y: number;
-  /** Ширина в rem. */
-  w: number;
-  r?: number;
-  /** Период взмаха и круга порхания, в секундах. */
-  flap?: number;
-  wander?: number;
-  delay?: number;
-}) {
+/** Бабочка, сидящая на цветке. Позиция — в процентах родителя, ширина — в rem. */
+export function Butterfly({ kind, x, y, w, r = 0 }: { kind: 'blue' | 'amber'; x: number; y: number; w: number; r?: number }) {
   const asset = kind === 'blue' ? FLOWERS.butterflyBlue : FLOWERS.butterflyAmber;
-  const style = {
-    '--x': `${x}%`,
-    '--y': `${y}%`,
-    '--w': `${w}rem`,
-    '--r': `${r}deg`,
-    '--flap': `${flap}s`,
-    '--wander': `${wander}s`,
-    '--wander-delay': `${-delay}s`,
-  } as CSSProperties;
+  const style = { '--x': `${x}%`, '--y': `${y}%`, '--w': `${w}rem`, '--r': `${r}deg` } as CSSProperties;
 
   return (
     <span className="g-butterfly" style={style} data-butterfly aria-hidden>
