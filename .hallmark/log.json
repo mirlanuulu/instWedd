@@ -1,6 +1,15 @@
 [
   {
     "date": "2026-10-01",
+    "macrostructure": "bespoke: обложка журнала перелистывается, внутри журнальная полоса с линейками",
+    "theme": "custom",
+    "theme_axes": "light / high-contrast-serif / warm",
+    "vibe": "газетная бумага, дидона, журнальный красный, линейки",
+    "enrichment": "CSS: перелистывание обложки, буквица, отточия",
+    "brief": "Toi invitation · стиль «Эдиториал» (/editorial)"
+  },
+  {
+    "date": "2026-10-01",
     "macrostructure": "bespoke: лист кальки над приглашением на картоне, вёрстка по левому краю",
     "theme": "custom",
     "theme_axes": "light / roman-serif (thin) / neutral",

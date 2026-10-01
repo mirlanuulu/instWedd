@@ -1,39 +1,37 @@
 import { IntroProvider } from '@/components/providers/IntroProvider';
 import { MusicProvider } from '@/components/providers/MusicProvider';
 import { IntroGate } from '@/designs/shared/IntroGate';
-import { Calendar } from './Calendar';
 import { LanguageSwitch, MusicButton } from './Controls';
 import { Countdown } from './Countdown';
+import { Cover } from './Cover';
 import { DressCode } from './DressCode';
 import { Footer } from './Footer';
 import { Hero } from './Hero';
 import { Program } from './Program';
 import { Rsvp } from './Rsvp';
 import { Story } from './Story';
-import { Vellum } from './Vellum';
 import { Venue } from './Venue';
 
 /**
- * Стиль «Минимализм»: калька над приглашением, тонкая антиква, гротеск и поля.
- * Вместо стираемой даты — календарь месяца с обведённым днём.
+ * Стиль «Эдиториал»: приглашение как свадебный номер журнала. Обложка
+ * перелистывается, внутри — полоса с линейками, буквицей и отточиями.
  */
-export function MinimalInvite() {
+export function EditorialInvite() {
   return (
     <MusicProvider>
       <IntroProvider>
-        {/* Без JavaScript кальку не снять: приглашение показывается сразу. */}
+        {/* Без JavaScript обложку не перелистнуть: номер показывается сразу. */}
         <noscript>
-          <style>{'[data-intro]{display:none}.settle[data-sealed]{transform:none}'}</style>
+          <style>{'[data-intro]{display:none}'}</style>
         </noscript>
 
-        <Vellum />
+        <Cover />
         <LanguageSwitch />
         <MusicButton />
 
         <IntroGate footer={<Footer />}>
           <Hero />
           <Countdown />
-          <Calendar />
           <Story />
           <Program />
           <Venue />
