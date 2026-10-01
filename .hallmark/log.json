@@ -1,6 +1,15 @@
 [
   {
     "date": "2026-10-01",
+    "macrostructure": "bespoke: бархатный занавес, цветные полосы с фестонами, бегущая строка",
+    "theme": "custom",
+    "theme_axes": "dark-mid / display-heavy / chromatic-jewel",
+    "vibe": "изумруд, малина, шафранное золото, сцена, звёзды",
+    "enrichment": "CSS/SVG/JS: занавес, фестоны, вращающийся значок, мерцающие звёзды, бегущая строка, конфетти",
+    "brief": "Toi invitation · стиль «Максимализм» (/maximal)"
+  },
+  {
+    "date": "2026-10-01",
     "macrostructure": "bespoke: телеграфный бланк, текст на наклеенных лентах, почтовый штемпель",
     "theme": "custom",
     "theme_axes": "light / mono / warm",

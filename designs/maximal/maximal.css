@@ -1,0 +1,407 @@
+/* Hallmark · route: custom (bespoke) · structure: бархатный занавес, цветные полосы с фестонами, бегущая строка
+ * idea: "той как праздник на сцене: занавес раздвигается, всё блестит и движется"
+ * paper: oklch(96% 0.025 85) · полосы: изумруд oklch(36% 0.09 165), малина oklch(44% 0.19 350), бирюза oklch(72% 0.11 195)
+ * pop: шафранное золото oklch(81% 0.15 80) · display: Yeseva One · body: Geologica
+ * axes: dark-mid / display-heavy / chromatic-jewel · contrast: pass (40–41) · studied: no
+ * context: стиль назван пользователем; просьба — больше эффектов «для простого народа»
+ * gates: сознательно шире обычного — несколько цветов и бесконечные анимации (бегущая строка, значок, звёзды) — это и есть стиль;
+ *        при «уменьшить движение» всё останавливается. 39 — как в остальных стилях
+ */
+
+/* Tailwind сканирует только файлы максимализма и общую папку стилей. */
+@import 'tailwindcss' source(none);
+@import '../shared/reveal.css';
+
+@source './';
+@source '../shared';
+@source '../../app/maximal';
+
+@theme static {
+  --color-*: initial;
+  /* Сырые цвета палитры. В разметке — через полосы (band-*), а не напрямую. */
+  --color-paper: oklch(96% 0.025 85);
+  --color-emerald: oklch(36% 0.09 165);
+  --color-emerald-2: oklch(29% 0.075 165);
+  --color-magenta: oklch(44% 0.19 350);
+  --color-magenta-2: oklch(34% 0.16 350);
+  --color-gold: oklch(81% 0.15 80);
+  --color-gold-2: oklch(90% 0.1 90);
+  --color-turquoise: oklch(72% 0.11 195);
+  --color-ink: oklch(22% 0.035 330);
+  --color-ink-2: oklch(38% 0.04 330);
+  --color-cream-2: oklch(88% 0.04 85);
+
+  /*
+   * Смысловые цвета текущей полосы, по умолчанию — изумрудной. Класс band-*
+   * переопределяет их на своём элементе, потомки наследуют вычисленные значения.
+   */
+  --color-surface: oklch(36% 0.09 165);
+  --color-on: oklch(96% 0.025 85);
+  --color-on-2: oklch(88% 0.04 85);
+  --color-pop: oklch(81% 0.15 80);
+  --color-line: oklch(81% 0.15 80);
+
+  /* Для салюта и кнопок формы. */
+  --color-accent: oklch(44% 0.19 350);
+  --color-accent-2: oklch(72% 0.11 195);
+  --color-signal: oklch(92% 0.12 95);
+
+  --font-*: initial;
+  --font-display: var(--font-yeseva), ui-serif, Georgia, serif;
+  --font-body: var(--font-geologica), ui-sans-serif, system-ui, sans-serif;
+  --default-font-family: var(--font-body);
+
+  --text-*: initial;
+  --text-label: 0.8125rem;
+  --text-label--line-height: 1.35;
+  --text-base: 1.0625rem;
+  --text-base--line-height: 1.6;
+  --text-md: 1.375rem;
+  --text-md--line-height: 1.3;
+  --text-xl: clamp(2.25rem, 11vw, 3.25rem);
+  --text-xl--line-height: 1.05;
+  --text-display: clamp(3.75rem, 20vw, 7rem);
+  --text-display--line-height: 0.95;
+
+  --spacing: 0.25rem;
+  --spacing-gutter: clamp(1.25rem, 6vw, 2.5rem);
+
+  --container-stage: 36rem;
+
+  --radius-*: initial;
+  --radius-md: 1rem;
+  --radius-lg: 2rem;
+  --radius-pill: 999px;
+
+  --ease-*: initial;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+:root {
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
+  --dur-long: 420ms;
+
+  --z-base: 0;
+  --z-raised: 10;
+  --z-intro: 30;
+  --z-controls: 40;
+}
+
+/* Полосы страницы. Каждая задаёт фон, текст, акцент и цвет линий. */
+.band-emerald {
+  --color-surface: var(--color-emerald);
+  --color-on: var(--color-paper);
+  --color-on-2: var(--color-cream-2);
+  --color-pop: var(--color-gold);
+  --color-line: var(--color-gold);
+}
+
+.band-magenta {
+  --color-surface: var(--color-magenta);
+  --color-on: var(--color-paper);
+  --color-on-2: var(--color-cream-2);
+  --color-pop: var(--color-gold);
+  --color-line: var(--color-gold);
+}
+
+.band-cream {
+  --color-surface: var(--color-paper);
+  --color-on: var(--color-ink);
+  --color-on-2: var(--color-ink-2);
+  --color-pop: var(--color-magenta);
+  --color-line: var(--color-gold);
+}
+
+.band-turquoise {
+  --color-surface: var(--color-turquoise);
+  --color-on: var(--color-ink);
+  --color-on-2: var(--color-ink);
+  --color-pop: var(--color-magenta-2);
+  --color-line: var(--color-ink);
+}
+
+.band-deep {
+  --color-surface: var(--color-emerald-2);
+  --color-on: var(--color-paper);
+  --color-on-2: var(--color-cream-2);
+  --color-pop: var(--color-gold);
+  --color-line: var(--color-gold);
+}
+
+@layer base {
+  /* clip, а не hidden: hidden делает корень скролл-контейнером и ломает position: sticky. */
+  html,
+  body {
+    overflow-x: clip;
+    overscroll-behavior-x: none;
+  }
+
+  html {
+    color-scheme: dark;
+    background-color: var(--color-emerald-2);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    min-height: 100dvh;
+    background-color: var(--color-emerald-2);
+    color: var(--color-paper);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-style: normal;
+    font-weight: 400;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--color-gold);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: var(--color-emerald-2);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: var(--radius-pill);
+    background: linear-gradient(var(--color-gold), var(--color-magenta));
+    min-height: 48px;
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-gold) var(--color-emerald-2);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 150ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 150ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Полоса страницы: свой фон и фестоны сверху — полукруги её цвета налезают на предыдущую. */
+  .band {
+    position: relative;
+    background-color: var(--color-surface);
+    color: var(--color-on);
+  }
+
+  .band::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: -0.95rem;
+    height: 1rem;
+    background: radial-gradient(circle at 1rem 1rem, var(--color-surface) 0.95rem, transparent 1rem) 0 0 / 2rem 1rem
+      repeat-x;
+    pointer-events: none;
+  }
+
+  .label {
+    font-size: var(--text-label);
+    line-height: var(--text-label--line-height);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  /* Имена: толстая дидона с цветной тенью-подложкой, как вывеска. */
+  .neon {
+    color: var(--color-gold);
+    text-shadow:
+      0.04em 0.04em 0 var(--color-magenta),
+      0.08em 0.08em 0 var(--color-magenta-2);
+  }
+
+  /* Бегущая строка: две одинаковые половины, лента сдвигается ровно на одну. */
+  .marquee {
+    overflow: hidden;
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 26s linear infinite;
+  }
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* Значок с датой: надпись по кругу медленно вращается. */
+  .spin {
+    animation: spin 18s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Звёздочки мерцают каждая в своём ритме. */
+  .twinkle {
+    animation: twinkle 2.4s var(--ease-in-out) infinite;
+    animation-delay: var(--d, 0ms);
+  }
+
+  @keyframes twinkle {
+    0%,
+    100% {
+      opacity: 0.2;
+      transform: scale(0.5) rotate(0deg);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1) rotate(45deg);
+    }
+  }
+
+  /* Занавес: бархатные складки — полосы светлее и темнее, сверху золотая бахрома. */
+  .curtain {
+    position: fixed;
+    inset-block: 0;
+    z-index: var(--z-intro);
+    width: 50.5%;
+    background:
+      linear-gradient(to bottom, transparent 85%, color-mix(in oklch, var(--color-magenta-2) 70%, black)),
+      repeating-linear-gradient(
+        90deg,
+        var(--color-magenta-2) 0,
+        var(--color-magenta) 1.1rem,
+        oklch(52% 0.2 350) 1.6rem,
+        var(--color-magenta) 2.1rem,
+        var(--color-magenta-2) 3.2rem
+      );
+  }
+
+  .curtain-left {
+    left: 0;
+  }
+
+  .curtain-right {
+    right: 0;
+  }
+
+  /* Ламбрекен с бахромой поверх обеих половин. */
+  .valance {
+    position: fixed;
+    inset-inline: 0;
+    top: 0;
+    z-index: calc(var(--z-intro) + 1);
+    height: 3.5rem;
+    background:
+      radial-gradient(circle at 1.25rem 0, var(--color-magenta-2) 1.25rem, transparent 1.3rem) 0 100% / 2.5rem 1.25rem
+        repeat-x,
+      linear-gradient(var(--color-magenta-2), var(--color-magenta-2)) top / 100% 2.25rem no-repeat;
+    border-bottom: 0;
+  }
+
+  .valance::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 2.1rem;
+    height: 0.35rem;
+    background: repeating-linear-gradient(90deg, var(--color-gold) 0 0.5rem, var(--color-gold-2) 0.5rem 1rem);
+  }
+
+  /* Табличка на занавесе: кремовая карточка в двойной золотой рамке. */
+  .plaque {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    border: 3px solid var(--color-gold);
+    outline: 2px solid var(--color-gold);
+    outline-offset: 5px;
+    border-radius: var(--radius-md);
+  }
+
+  /* Рамка фото: толстая золотая, со смещённой малиновой подложкой. */
+  .frame {
+    border: 4px solid var(--color-gold);
+    border-radius: var(--radius-lg);
+    box-shadow: 0.6rem 0.6rem 0 var(--color-magenta);
+  }
+
+  .music-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 0.875rem;
+  }
+
+  .music-bars span {
+    width: 3px;
+    height: 100%;
+    border-radius: 2px;
+    background-color: currentColor;
+    transform: scaleY(0.3);
+    transform-origin: bottom;
+  }
+
+  [data-playing] .music-bars span {
+    animation: bar 0.9s var(--ease-in-out) infinite alternate;
+  }
+
+  [data-playing] .music-bars span:nth-child(2) {
+    animation-delay: -0.4s;
+  }
+
+  [data-playing] .music-bars span:nth-child(3) {
+    animation-delay: -0.7s;
+  }
+
+  @keyframes bar {
+    to {
+      transform: scaleY(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track,
+    .spin,
+    .twinkle {
+      animation: none;
+    }
+  }
+}

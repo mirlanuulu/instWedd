@@ -26,3 +26,5 @@ TTF-копии шрифтов приглашения. Нужны только п
 | `Onest-SemiBold.ttf` | Onest, вес 600 | гротеск: подписи |
 | `IBMPlexMono-Bold.ttf` | IBM Plex Mono, вес 700 | машинопись: шапка, имена, иконка |
 | `IBMPlexMono-Medium.ttf` | IBM Plex Mono, вес 500 | машинопись: текст |
+| `YesevaOne-Regular.ttf` | Yeseva One | максимализм: имена, дата |
+| `Geologica-SemiBold.ttf` | Geologica, вес 600 | максимализм: подписи |

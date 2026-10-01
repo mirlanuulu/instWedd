@@ -47,13 +47,26 @@ export const delay = (ms: number) => ({ '--d': `${ms}ms` }) as CSSProperties;
  * буквы для него скрыты.
  */
 export function Letters({ text, start = 0 }: { text: string; start?: number }) {
+  // Буквы сгруппированы по словам: строка переносится между словами, а не посреди слова.
+  let index = 0;
+  const words = text.split(' ').map((word) =>
+    Array.from(word).map((char) => ({ char, index: index++ })),
+  );
+
   return (
     <span data-reveal="letters" style={delay(start)}>
       <span className="sr-only">{text}</span>
       <span aria-hidden="true">
-        {Array.from(text).map((char, index) => (
-          <span key={`${char}-${index}`} className="reveal-letter" style={{ '--i': index } as CSSProperties}>
-            {char === ' ' ? ' ' : char}
+        {words.map((letters, wordIndex) => (
+          <span key={wordIndex}>
+            {wordIndex > 0 && ' '}
+            <span style={{ whiteSpace: 'nowrap' }}>
+              {letters.map(({ char, index: letterIndex }) => (
+                <span key={letterIndex} className="reveal-letter" style={{ '--i': letterIndex } as CSSProperties}>
+                  {char}
+                </span>
+              ))}
+            </span>
           </span>
         ))}
       </span>
