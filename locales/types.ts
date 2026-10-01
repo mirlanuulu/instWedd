@@ -26,6 +26,8 @@ export interface Dictionary {
   date: {
     /** "29 ноября 2026" / "2026-жылдын 29-ноябры" */
     full: (day: number, monthIndex: number, year: number) => string;
+    /** Название месяца отдельно, без числа: «ноябрь». Январь = 0. */
+    months: readonly string[];
     /** Воскресенье = 0. */
     weekdays: readonly [string, string, string, string, string, string, string];
     time: (time: string) => string;

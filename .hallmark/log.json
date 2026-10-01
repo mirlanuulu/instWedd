@@ -1,6 +1,15 @@
 [
   {
     "date": "2026-10-01",
+    "macrostructure": "bespoke: ворота из цветов → фото пары в арке → имена каллиграфией",
+    "theme": "custom",
+    "theme_axes": "light / script + roman-serif / soft-floral",
+    "vibe": "сад в цвету: старинные акварельные розы, бумага XIX века, бабочки, золотая нить",
+    "enrichment": "растровые акварели Редуте (CC0), переведённые в прозрачность; фото Unsplash; GSAP-открытие ворот",
+    "brief": "Toi invitation · версия «Гүлзар» (/gulzar), этап 1: интро и первый экран"
+  },
+  {
+    "date": "2026-10-01",
     "macrostructure": "bespoke: бархатный занавес, цветные полосы с фестонами, бегущая строка",
     "theme": "custom",
     "theme_axes": "dark-mid / display-heavy / chromatic-jewel",

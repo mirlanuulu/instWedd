@@ -1,0 +1,490 @@
+/* Hallmark · route: custom (bespoke) · structure: ворота из цветов → фото пары в арке → имена каллиграфией
+ * idea: "той как сад в цвету: живописные розы, бабочки, радость и нежность"
+ * paper: oklch(97.4% 0.012 78) (настоящая бумага XIX века) · ink: oklch(33% 0.05 15) · rose: oklch(52% 0.13 8)
+ * display: Great Vibes (+ дополнение с ө ү ң) · body: Cormorant Garamond
+ * axes: light / image-led / soft-floral · contrast: pass (40–41) · studied: конкуренты KG/KZ, тренды 2026
+ * context: пользователь отверг векторные «кружочки»; графика — растровые акварели Редуте (CC0)
+ */
+
+/* Tailwind сканирует только файлы «Гүлзара». */
+@import 'tailwindcss' source(none);
+
+@source './';
+@source '../../app/gulzar';
+
+@theme static {
+  --color-*: initial;
+  --color-paper: oklch(97.4% 0.012 78);
+  --color-card: oklch(98.9% 0.007 80);
+  --color-ink: oklch(33% 0.05 15);
+  --color-ink-2: oklch(46% 0.04 18);
+  --color-rose: oklch(52% 0.13 8);
+  --color-rose-2: oklch(45% 0.12 8);
+  --color-rose-soft: oklch(90% 0.035 12);
+  --color-on-rose: oklch(98.9% 0.007 80);
+  --color-gold: oklch(72% 0.075 78);
+  --color-sage: oklch(62% 0.05 150);
+
+  --font-*: initial;
+  --font-serif: var(--font-gulzar-serif), Georgia, 'Times New Roman', serif;
+  /* Буквы, которых нет в Great Vibes (ө ү ң), браузер берёт из дополнения. */
+  --font-script: var(--font-gulzar-script), var(--font-gulzar-script-kg), cursive;
+  --default-font-family: var(--font-serif);
+
+  --ease-petal: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html,
+  body {
+    overflow-x: clip;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-paper);
+    /* Настоящая бумага с поля гравюры Редуте, бесшовная плитка. */
+    background-image: url('/gulzar/paper.webp');
+    background-size: 600px 600px;
+    color: var(--color-ink);
+    font-family: var(--font-serif);
+    font-size: 1.125rem;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-rose);
+    outline-offset: 3px;
+  }
+
+  img {
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+}
+
+/* ---------- Общие ---------- */
+
+.g-eyebrow {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-rose);
+}
+
+.g-names {
+  font-family: var(--font-script);
+  font-weight: 400;
+  line-height: 1;
+  color: var(--color-ink);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.g-amp {
+  font-family: var(--font-script);
+  color: var(--color-rose);
+}
+
+/* Цветок: позиция и размер в долях родителя, поворот, отражение. */
+.g-flower {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  height: auto;
+  rotate: var(--r, 0deg);
+  scale: var(--flip, 1) 1;
+  transform-origin: 50% 70%;
+  pointer-events: none;
+}
+
+/* Лёгкое покачивание, будто от ветра. Каждый цветок — со своей фазой. */
+@media (prefers-reduced-motion: no-preference) {
+  .g-sway {
+    animation: g-sway var(--sway-dur, 7s) ease-in-out var(--sway-delay, 0s) infinite alternate;
+  }
+}
+
+@keyframes g-sway {
+  from {
+    rotate: calc(var(--r, 0deg) - 1.6deg);
+  }
+  to {
+    rotate: calc(var(--r, 0deg) + 1.6deg);
+  }
+}
+
+/* ---------- Бабочки ---------- */
+
+.g-butterfly {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w, 3rem);
+  pointer-events: none;
+  rotate: var(--r, 0deg);
+}
+
+/* Взмах крыльев: картинка сжимается по горизонтали к своей оси. */
+.g-butterfly img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform-origin: 50% 50%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .g-butterfly img {
+    animation: g-flap var(--flap, 0.32s) ease-in-out infinite alternate;
+  }
+
+  .g-butterfly {
+    animation: g-wander var(--wander, 9s) ease-in-out var(--wander-delay, 0s) infinite;
+  }
+}
+
+@keyframes g-flap {
+  from {
+    scale: 1 1;
+  }
+  to {
+    scale: 0.28 0.96;
+  }
+}
+
+/* Порхание вокруг точки посадки. */
+@keyframes g-wander {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  22% {
+    translate: 1.6rem -1.2rem;
+  }
+  45% {
+    translate: 0.4rem -2.4rem;
+  }
+  68% {
+    translate: -1.4rem -1rem;
+  }
+  85% {
+    translate: -0.6rem 0.4rem;
+  }
+}
+
+/* ---------- Ворота сада (интро) ---------- */
+
+.g-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  overflow: hidden;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Своя бумага у ворот: под ними уже лежит первый экран. */
+.g-gate-paper {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-paper);
+  background-image: url('/gulzar/paper.webp');
+  background-size: 600px 600px;
+}
+
+/*
+ * Сцена: композиция рассчитана на портретный экран и на широком
+ * не растягивается — по бокам остаётся бумага.
+ */
+.g-gate-stage {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: min(100vw, 78svh);
+  translate: -50% 0;
+}
+
+.g-gate-leaf {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.g-gate-card-wrap {
+  position: absolute;
+  inset: 0;
+  container-type: size;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  pointer-events: none;
+}
+
+/* Карточка-арка: верх — полукруг, как вход в сад. */
+.g-gate-card {
+  --cw: min(80cqw, 20.5rem);
+  position: relative;
+  width: var(--cw);
+  padding: calc(var(--cw) * 0.3) 1.5rem 2rem;
+  border-radius: calc(var(--cw) / 2) calc(var(--cw) / 2) 1.25rem 1.25rem;
+  background-color: var(--color-card);
+  background-image: url('/gulzar/paper.webp');
+  background-size: 600px 600px;
+  box-shadow:
+    0 1px 0 oklch(100% 0 0 / 0.8) inset,
+    0 18px 40px -18px oklch(33% 0.05 15 / 0.35),
+    0 3px 10px -4px oklch(33% 0.05 15 / 0.18);
+  text-align: center;
+  pointer-events: auto;
+}
+
+/* Тонкая золотая линия внутри карточки, повторяет арку. */
+.g-gate-card::before {
+  content: '';
+  position: absolute;
+  inset: 0.55rem;
+  border: 1px solid oklch(72% 0.075 78 / 0.7);
+  border-radius: calc(var(--cw) / 2 - 0.55rem) calc(var(--cw) / 2 - 0.55rem) 0.85rem 0.85rem;
+  pointer-events: none;
+}
+
+.g-gate-names {
+  margin: 0.9rem 0 0.6rem;
+  font-size: clamp(2.6rem, 12.5vw, 3.4rem);
+}
+
+.g-gate-names .g-amp {
+  display: block;
+  margin: 0.05em 0 0.08em;
+  font-size: 0.62em;
+}
+
+.g-gate-date {
+  font-variant-numeric: lining-nums;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: var(--color-ink-2);
+}
+
+.g-open {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  margin-top: 1.6rem;
+  padding: 0 1.6rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-rose);
+  color: var(--color-on-rose);
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 8px 20px -10px oklch(52% 0.13 8 / 0.8);
+  transition:
+    background-color 160ms ease-out,
+    scale 160ms ease-out;
+}
+
+.g-open:active {
+  scale: 0.96;
+}
+
+@media (hover: hover) {
+  .g-open:hover {
+    background: var(--color-rose-2);
+  }
+}
+
+/* Мягкая волна вокруг кнопки: зовёт нажать. */
+@media (prefers-reduced-motion: no-preference) {
+  .g-open::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 1.5px solid var(--color-rose);
+    animation: g-ripple 2.4s var(--ease-petal) infinite;
+    pointer-events: none;
+  }
+}
+
+@keyframes g-ripple {
+  from {
+    opacity: 0.7;
+    scale: 1;
+  }
+  to {
+    opacity: 0;
+    scale: 1.18 1.45;
+  }
+}
+
+.g-gate-hint {
+  margin-top: 0.7rem;
+  font-size: 0.875rem;
+  letter-spacing: 0.06em;
+  color: var(--color-ink-2);
+}
+
+/* ---------- Первый экран ---------- */
+
+.g-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: max(4.25rem, calc(env(safe-area-inset-top) + 3.5rem)) 1.25rem 4rem;
+  text-align: center;
+}
+
+.g-arch-wrap {
+  position: relative;
+  width: min(72vw, 23rem);
+  margin-top: 1.6rem;
+}
+
+/* Золотая арка-рамка с отступом от фото. */
+.g-arch-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -0.6rem;
+  border: 1px solid var(--color-gold);
+  border-radius: 50% 50% 0.4rem 0.4rem / 39% 39% 0.4rem 0.4rem;
+  pointer-events: none;
+}
+
+.g-arch {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  border-radius: 50% 50% 0.25rem 0.25rem / 40% 40% 0.25rem 0.25rem;
+  background: var(--color-rose-soft);
+  box-shadow: 0 24px 48px -28px oklch(33% 0.05 15 / 0.45);
+}
+
+.g-arch img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+/* Цветы вокруг арки: координаты в долях ширины арки. */
+.g-arch-flowers {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+
+.g-hero-names {
+  margin-top: 2.6rem;
+  font-size: clamp(3.4rem, 16vw, 5.5rem);
+}
+
+.g-hero-names .g-amp {
+  display: block;
+  margin: 0.02em 0 0.06em;
+  font-size: 0.55em;
+}
+
+.g-invitation {
+  max-width: 24ch;
+  text-wrap: balance;
+  margin-top: 1.4rem;
+  font-size: 1.25rem;
+  line-height: 1.45;
+  color: var(--color-ink-2);
+}
+
+/* Дата: день недели | число | время, под ними месяц и год. */
+.g-date {
+  font-variant-numeric: lining-nums;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+  width: min(100%, 21rem);
+  margin-top: 2.2rem;
+}
+
+.g-date-side {
+  padding-block: 0.55rem;
+  border-block: 1px solid var(--color-gold);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ink-2);
+  white-space: nowrap;
+}
+
+.g-date-day {
+  font-size: 3.6rem;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--color-rose);
+}
+
+.g-date-month {
+  font-variant-numeric: lining-nums;
+  margin-top: 0.7rem;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-ink-2);
+}
+
+/* ---------- Переключатель языка ---------- */
+
+.g-lang {
+  position: absolute;
+  top: max(0.75rem, env(safe-area-inset-top));
+  right: max(0.75rem, env(safe-area-inset-right));
+  z-index: 50;
+  display: flex;
+  padding: 0.2rem;
+  border: 1px solid oklch(72% 0.075 78 / 0.6);
+  border-radius: 999px;
+  background: oklch(98.9% 0.007 80 / 0.85);
+  backdrop-filter: blur(6px);
+}
+
+.g-lang button {
+  min-width: 3rem;
+  min-height: 2.5rem;
+  padding: 0 0.8rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-ink-2);
+  font-family: var(--font-serif);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease-out,
+    color 160ms ease-out;
+}
+
+.g-lang button[aria-pressed='true'] {
+  background: var(--color-rose);
+  color: var(--color-on-rose);
+}
